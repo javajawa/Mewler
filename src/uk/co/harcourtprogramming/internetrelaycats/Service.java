@@ -1,4 +1,4 @@
-package uk.co.harcourtprogramming.netcat;
+package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.Calendar;
 import java.util.logging.ConsoleHandler;

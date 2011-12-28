@@ -1,9 +1,9 @@
-package uk.co.harcourtprogramming.netcat;
+package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.logging.Level;
 
 /**
- * <p>An external service is a {@link NetCat} {@link Service} that runs in a
+ * <p>An external service is a {@link RelayCat} {@link Service} that runs in a
  * separate thread from the IRC interface.</p>
  * <p>Currently, it is unable to receive messages (although, they can be
  * forwarded with a {@link MessageService}</p>
@@ -17,17 +17,17 @@ public abstract class ExternalService extends Service implements Runnable
 	 */
 	private final Thread t = new Thread(this);
 	/**
-	 * <p>Reference to the {@link NetCat} instance that is using this
+	 * <p>Reference to the {@link RelayCat} instance that is using this
 	 * service.</p>
 	 * <p>This only will be null until the instance starts the thread; this must
 	 * always be tested for.</p>
 	 */
-	private NetCat inst = null;
+	private RelayCat inst = null;
 
 	/**
 	 * <p>Create the external service</p>
 	 * <p>The {@link #t thread} is created at this time, and will be {@link
-	 * Thread#start() started} when the {@link NetCat} {@link #inst
+	 * Thread#start() started} when the {@link RelayCat} {@link #inst
 	 * instance} is initialised.</p>
 	 */
 	public ExternalService()
@@ -74,11 +74,11 @@ public abstract class ExternalService extends Service implements Runnable
 	}
 
 	/**
-	 * Assigns a {@link NetCat} instance to this service, allowing it
+	 * Assigns a {@link RelayCat} instance to this service, allowing it
 	 * to interface with IRC.
 	 * @param i The instance to assign
 	 */
-	final void setInstance(NetCat i)
+	final void setInstance(RelayCat i)
 	{
 		// TODO: check we're not disconnecting another instance
 		inst = i;

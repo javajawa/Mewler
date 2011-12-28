@@ -1,4 +1,4 @@
-package uk.co.harcourtprogramming.netcat;
+package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,13 +14,13 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.IrcException;
 
-public class NetCat extends PircBot implements Runnable
+public class RelayCat extends PircBot implements Runnable
 {
 	public class Message
 	{
 		private final String message;
 		private final String nick;
-		private final String me = NetCat.this.getNick();
+		private final String me = RelayCat.this.getNick();
 		private final String channel;
 		private final boolean action;
 		private boolean dispose = false;
@@ -63,7 +63,7 @@ public class NetCat extends PircBot implements Runnable
 			if (message == null || message.length() == 0) return;
 			for (String s : message.split("\n"))
 			{
-				NetCat.this.sendMessage(this.nick, s);
+				RelayCat.this.sendMessage(this.nick, s);
 			}
 		}
 
@@ -71,7 +71,7 @@ public class NetCat extends PircBot implements Runnable
 		{
 			if (action == null || action.length() == 0) return;
 			final String target = (this.channel == null ? this.nick : this.channel);
-			NetCat.this.sendAction(target, action);
+			RelayCat.this.sendAction(target, action);
 		}
 
 		public synchronized void replyToAll(String message)
@@ -83,7 +83,7 @@ public class NetCat extends PircBot implements Runnable
 			}
 			for (String s : message.split("\n"))
 			{
-				NetCat.this.sendMessage(this.channel, s);
+				RelayCat.this.sendMessage(this.channel, s);
 			}
 		}
 
@@ -130,7 +130,7 @@ public class NetCat extends PircBot implements Runnable
 	private final List<MessageService> msrvs = new ArrayList<MessageService>();
 	private boolean dispose = false;
 
-	public NetCat(final String name, final String host, final List<String> channels)
+	public RelayCat(final String name, final String host, final List<String> channels)
 	{
 		if (name==null || name.length()==0) throw new IllegalArgumentException("Name must be a non-empty String");
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
