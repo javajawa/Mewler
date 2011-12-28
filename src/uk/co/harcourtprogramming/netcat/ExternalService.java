@@ -1,7 +1,5 @@
 package uk.co.harcourtprogramming.netcat;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 public abstract class ExternalService extends Service implements Runnable
