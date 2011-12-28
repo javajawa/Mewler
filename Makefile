@@ -22,6 +22,7 @@ $(BUILD)/%.class : $(SRC)/%.java $(LIBS)
 	$(JAVAC) -classpath $(CP) -d $(BUILD) $<
 
 $(PACKAGEJAR): $(PACKAGE) $(BUILD) $(CLASS) $(LIBS)
+	-rm -f $(PACKAGEJAR)
 	$(JAR) cfm $(PACKAGEJAR) Manifest.mf -C $(BUILD) .
 	cp $(LIBS) $(PACKAGE)
 
