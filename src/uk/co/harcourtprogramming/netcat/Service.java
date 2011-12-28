@@ -25,6 +25,7 @@ public abstract class Service
 		final Handler h = new ConsoleHandler();
 		h.setFormatter(new Formatter()
 		{
+			@Override
 			public String format(LogRecord l)
 			{
 				Calendar c = Calendar.getInstance();
@@ -59,6 +60,11 @@ public abstract class Service
 	public void log(Level lvl, String msg)
 	{
 		log.log(lvl, msg);
+	}
+
+	public void log(Level lvl, String msg, Object[] params)
+	{
+		log.log(lvl, msg, params);
 	}
 
 	public void log(Level lvl, Throwable ex)

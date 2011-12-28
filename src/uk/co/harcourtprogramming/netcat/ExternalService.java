@@ -19,7 +19,7 @@ public abstract class ExternalService extends Service implements Runnable
 
 	protected synchronized final void message(String target, String message)
 	{
-		log(Level.FINE, "External to " + target + ": " + message);
+		log(Level.FINE, "External to {0}: {1}", new Object[]{target, message});
 		if (inst == null) return;
 		for (String line : message.split("\n"))
 		{

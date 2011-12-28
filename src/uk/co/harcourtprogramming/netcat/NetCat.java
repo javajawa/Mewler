@@ -154,12 +154,14 @@ public class NetCat extends PircBot implements Runnable
 		synchronized(srvs)
 		{
 			if (dispose) return;
-			log.log(Level.INFO, "Service Loaded: " + s.getClass().getSimpleName() + '@' + s.getId());
+			log.log(Level.INFO, "Service Loaded: {0}@{1}",
+			    new Object[]{s.getClass().getSimpleName(), s.getId()});
 			srvs.add(s);
 			if (s instanceof MessageService)
 			{
 				msrvs.add((MessageService)s);
-				log.log(Level.INFO, "Service " + s.getClass().getSimpleName() + '@' + s.getId() + " loaded as MessageService.");
+				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
+				    new Object[]{s.getClass().getSimpleName(), s.getId()});
 			}
 			if (s instanceof ExternalService)
 			{
@@ -174,11 +176,11 @@ public class NetCat extends PircBot implements Runnable
 	{
 		try
 		{
-			log.log(Level.INFO, "Connecting to '" + host + "'");
+			log.log(Level.INFO, "Connecting to '{0}'", host);
 			this.connect(host);
 			for (String channel : channels)
 			{
-				log.log(Level.INFO, "Joining '" + channel + "'");
+				log.log(Level.INFO, "Joining '{0}'", channel);
 				this.joinChannel(channel);
 			}
 			log.log(Level.INFO, "Operations Running!");
@@ -209,13 +211,15 @@ public class NetCat extends PircBot implements Runnable
 
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
-		log.log(Level.FINE, "Message received from " + sender + '/' + channel);
+		log.log(Level.FINE, "Message received from {0}/{1}",
+		    new Object[]{sender, channel});
 		final Message m = new Message(message, sender, channel, false);
 		synchronized(srvs)
 		{
 			for (MessageService s : msrvs)
 			{
-				log.log(Level.FINE, "Message dispatched to " + s.getClass().getSimpleName() + '@' + s.getId());
+				log.log(Level.FINE, "Message dispatched to {0}@{1}",
+				    new Object[]{s.getClass().getSimpleName(), s.getId()});
 				try
 				{
 					s.handle(m);
@@ -238,13 +242,15 @@ public class NetCat extends PircBot implements Runnable
 	{
 		final String channel = (target == getNick() ? null : target);
 
-		log.log(Level.FINE, "Action received from " + sender + '/' + channel);
+		log.log(Level.FINE, "Action received from {0}/{1}",
+		    new Object[]{sender, channel});
 		final Message m = new Message(action, sender, channel, true);
 		synchronized(srvs)
 		{
 			for (MessageService s : msrvs)
 			{
-				log.log(Level.FINE, "Message dispatched to " + s.getClass().getSimpleName() + '@' + s.getId());
+				log.log(Level.FINE, "Message dispatched to {0}@{1}",
+				    new Object[]{s.getClass().getSimpleName(), s.getId()});
 				try
 				{
 					s.handle(m);
