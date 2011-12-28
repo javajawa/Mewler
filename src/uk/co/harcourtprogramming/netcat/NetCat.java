@@ -60,6 +60,7 @@ public class NetCat extends PircBot implements Runnable
 
 		public synchronized void reply(String message)
 		{
+			if (message == null || message.length() == 0) return;
 			for (String s : message.split("\n"))
 			{
 				NetCat.this.sendMessage(this.nick, s);
@@ -68,6 +69,7 @@ public class NetCat extends PircBot implements Runnable
 
 		public synchronized void act(String action)
 		{
+			if (action == null || action.length() == 0) return;
 			final String target = (this.channel == null ? this.nick : this.channel);
 			NetCat.this.sendAction(target, action);
 		}
