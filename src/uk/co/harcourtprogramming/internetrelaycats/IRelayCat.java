@@ -1,8 +1,10 @@
 package uk.co.harcourtprogramming.internetrelaycats;
+
 import org.jibble.pircbot.User;
+
 /**
- *
- * @author Benedict
+ * @todo Class Documentation
+ * @todo notes on how functions behave befoer connection is established
  */
 public interface IRelayCat
 {
