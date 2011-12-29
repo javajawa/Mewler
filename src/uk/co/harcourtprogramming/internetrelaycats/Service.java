@@ -18,7 +18,7 @@ public abstract class Service
 	}
 
 	private final int id = id();
-	private final Logger log = Logger.getLogger("NetCat.Service." + id);
+	private final Logger log = Logger.getLogger("InternetRelayCats.Service." + id);
 
 	public Service()
 	{
@@ -30,22 +30,9 @@ public abstract class Service
 			{
 				Calendar c = Calendar.getInstance();
 				c.setTimeInMillis(l.getMillis());
-				StringBuilder b = new StringBuilder();
-				b.append('[');
-				b.append(c.get(Calendar.HOUR_OF_DAY));
-				b.append(':');
-				b.append(c.get(Calendar.MINUTE));
-				b.append(' ');
-				b.append(l.getLevel().getLocalizedName());
-				b.append("] Service ");
-				b.append(Service.this.getClass().getSimpleName());
-				b.append('@');
-				b.append(Service.this.getId());
-				b.append(" >> ");
-				b.append(formatMessage(l));
-				b.append('\n');
 
-				return b.toString();
+				return String.format("[%2$tR %3$s] %1$s >> %4$s\n",
+				    Service.this, c, l.getLevel().toString(), formatMessage(l));
 			}
 		});
 		log.addHandler(h);
@@ -75,6 +62,12 @@ public abstract class Service
 	protected final int getId()
 	{
 		return id;
+	}
+
+	@Override
+	public String toString()
+	{
+		return this.getClass().getSimpleName() + '@' + this.getId();
 	}
 
 	public abstract void shutdown();
