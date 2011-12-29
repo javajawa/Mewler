@@ -376,7 +376,6 @@ public class RelayCat implements Runnable, IRelayCat
 			if (dispose) return;
 			log.log(Level.INFO, "Service Loaded: {0}@{1}",
 			    new Object[]{s.getClass().getSimpleName(), s.getId()});
-			srvs.add(s);
 			if (s instanceof MessageService)
 			{
 				msrvs.add((MessageService)s);
@@ -386,9 +385,11 @@ public class RelayCat implements Runnable, IRelayCat
 			if (s instanceof ExternalService)
 			{
 				final ExternalService es = (ExternalService)s;
-				es.setInstance(this);
+				if (es.getInstance() != this)
+					throw new IllegalArgumentException("Supplied External Service does not belong to this RelayCat instance");
 				es.getThread().start();
 			}
+			srvs.add(s);
 		}
 	}
 

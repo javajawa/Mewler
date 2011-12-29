@@ -22,15 +22,21 @@ public abstract class ExternalService extends Service implements Runnable
 	 * <p>This only will be null until the instance starts the thread; this must
 	 * always be tested for.</p>
 	 */
-	private RelayCat inst = null;
+	private IRelayCat inst = null;
 
 	/**
 	 * <p>Create the external service</p>
 	 * <p>The {@link #t thread} is created at this time, and will be {@link
 	 * Thread#start() started} when the {@link RelayCat} {@link #inst
 	 * instance} is initialised.</p>
+	 * <p>External services can only be attached to one {@link RelayCat}
+	 * instance; however, they still need to be added after creation with
+	 * {@link RelayCat#addService(uk.co.harcourtprogramming.internetrelaycats.Service)
+	 * RelayCat.addService}. Adding the service will cause the service's
+	 * thread to be run.</p>
+	 * @param inst the instance that this external service will work with
 	 */
-	public ExternalService()
+	public ExternalService(RelayCat inst)
 	{
 		super();
 		t.setDaemon(true);
@@ -43,6 +49,7 @@ public abstract class ExternalService extends Service implements Runnable
 				ExternalService.this.log(Level.SEVERE, "Uncaught Exception", thrwbl);
 			}
 		});
+		this.inst = inst;
 	}
 
 	/**
@@ -55,29 +62,11 @@ public abstract class ExternalService extends Service implements Runnable
 	}
 
 	/**
-	 * Send a message
-	 * @param target The user or channel to send the message to, e.g. 'bob',
-	 * '#kittens'
-	 * @param message The message to send. Multi-line messages are broken into
-	 * single lines, but will not lose ordering or be interspaced with other
-	 * lines from this service.
+	 * @return the instance that this service was created to serve
 	 */
-	protected synchronized final void message(String target, String message)
+	protected final IRelayCat getInstance()
 	{
-		log(Level.FINE, " -> {0}: {1}", new Object[]{target, message});
-		if (inst == null) return;
-		inst.message(target, message);
-	}
-
-	/**
-	 * Assigns a {@link RelayCat} instance to this service, allowing it
-	 * to interface with IRC.
-	 * @param i The instance to assign
-	 */
-	final void setInstance(RelayCat i)
-	{
-		// TODO: check we're not disconnecting another instance
-		inst = i;
+		return inst;
 	}
 }
 
