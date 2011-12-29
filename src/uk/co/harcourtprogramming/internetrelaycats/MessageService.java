@@ -1,7 +1,7 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
-public abstract class MessageService extends Service
+public interface MessageService
 {
-	abstract protected void handle(RelayCat.Message m);
+	public void handle(RelayCat.Message m);
 }
 
