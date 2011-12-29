@@ -13,10 +13,13 @@ import java.io.IOException;
 import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.IrcException;
+import org.jibble.pircbot.User;
 
 public class RelayCat implements Runnable, IRelayCat
 {
-	public class Message
+
+	@SuppressWarnings("PublicInnerClass")
+	public class Message implements IRelayCat
 	{
 		private final String message;
 		private final String nick;
@@ -35,24 +38,25 @@ public class RelayCat implements Runnable, IRelayCat
 
 		public boolean isAction()
 		{
-			return this.action;
+			return action;
 		}
 
 		public String getMessage()
 		{
-			return this.message;
+			return message;
 		}
 
 		public String getChannel()
 		{
-			return this.channel;
+			return channel;
 		}
 
 		public String getSender()
 		{
-			return this.nick;
+			return nick;
 		}
 
+		@Override
 		public String getNick()
 		{
 			return me;
@@ -60,11 +64,7 @@ public class RelayCat implements Runnable, IRelayCat
 
 		public synchronized void reply(String message)
 		{
-			if (message == null || message.length() == 0) return;
-			for (String s : message.split("\n"))
-			{
-				RelayCat.this.bot.sendMessage(this.nick, s);
-			}
+			RelayCat.this.message(nick, message);
 		}
 
 		public synchronized void act(String action)
@@ -76,20 +76,19 @@ public class RelayCat implements Runnable, IRelayCat
 
 		public synchronized void replyToAll(String message)
 		{
-			if (this.channel == null)
+			if (channel == null)
 			{
-				this.reply(message);
-				return;
+				RelayCat.this.message(nick, message);
 			}
-			for (String s : message.split("\n"))
+			else
 			{
-				RelayCat.this.bot.sendMessage(this.channel, s);
+				RelayCat.this.message(channel, message);
 			}
 		}
 
 		public void dispose()
 		{
-			this.dispose = true;
+			dispose = true;
 		}
 
 		@Override
@@ -133,6 +132,7 @@ public class RelayCat implements Runnable, IRelayCat
 		}
 	}
 
+	@SuppressWarnings("ProtectedInnerClass")
 	protected class CatBot extends PircBot
 	{
 		protected CatBot(String name)
@@ -284,7 +284,7 @@ public class RelayCat implements Runnable, IRelayCat
 				bot.joinChannel(channel);
 			}
 			log.log(Level.INFO, "Operations Running!");
-			this.wait();
+			wait();
 		}
 		catch (IOException ex)
 		{
@@ -311,7 +311,7 @@ public class RelayCat implements Runnable, IRelayCat
 
 	public synchronized void shutdown()
 	{
-		this.notifyAll(); // run() waits to stop thread being killed; exits when notified
+		notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
 	private final Object transmissionLock = new Object();
