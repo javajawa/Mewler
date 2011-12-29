@@ -6,7 +6,7 @@ import org.jibble.pircbot.User;
  * @todo Class Documentation
  * @todo notes on how functions behave befoer connection is established
  */
-public interface IRelayCat
+public interface RelayCat
 {
 	/**
 	 * <p>Send a message to a user or channel</p>

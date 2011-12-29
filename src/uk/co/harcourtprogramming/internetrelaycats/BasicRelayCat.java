@@ -18,7 +18,7 @@ import org.jibble.pircbot.User;
 /**
  * <p>The main class for InternetRelayCats</p>
  */
-public class BasicRelayCat implements Runnable, IRelayCat
+public class BasicRelayCat implements Runnable, RelayCat
 {
 
 	/**
@@ -26,7 +26,7 @@ public class BasicRelayCat implements Runnable, IRelayCat
 	 * channel that this instance is in</p>
 	 */
 	@SuppressWarnings("PublicInnerClass")
-	public class Message implements IRelayCat
+	public class Message implements RelayCat
 	{
 		/**
 		 * <p>The message that was sent</p>
@@ -327,7 +327,7 @@ public class BasicRelayCat implements Runnable, IRelayCat
 	 * </p>
 	 * <p>A list of channels can be supplied to the constructor so that they
 	 * are joined when the server connection is made. Other channels can be
-	 * joined later with {@link IRelayCat#join(java.lang.String)}
+	 * joined later with {@link RelayCat#join(java.lang.String)}
 	 * @todo Make a defensive copy of the channel list to prevent a concurrent
 	 * modification error if a new channel is added whilst they're being
 	 * processed in run
@@ -364,7 +364,7 @@ public class BasicRelayCat implements Runnable, IRelayCat
 	 * initialised, and their threads started</p>
 	 * <p>Note that {@link Service Services} that do not fall into one of the
 	 * two above categories will have to be supplied with access to the {@link
-	 * IRelayCat interface} through external code; this behaviour is not
+	 * RelayCat interface} through external code; this behaviour is not
 	 * recommended</p>
 	 * @param s the service to add
 	 */

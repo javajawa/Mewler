@@ -22,7 +22,7 @@ public abstract class ExternalService extends Service implements Runnable
 	 * <p>This only will be null until the instance starts the thread; this must
 	 * always be tested for.</p>
 	 */
-	private IRelayCat inst = null;
+	private RelayCat inst = null;
 
 	/**
 	 * <p>Create the external service</p>
@@ -64,7 +64,7 @@ public abstract class ExternalService extends Service implements Runnable
 	/**
 	 * @return the instance that this service was created to serve
 	 */
-	protected final IRelayCat getInstance()
+	protected final RelayCat getInstance()
 	{
 		return inst;
 	}
