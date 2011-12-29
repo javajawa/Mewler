@@ -14,13 +14,13 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.IrcException;
 
-public class RelayCat extends PircBot implements Runnable
+public class RelayCat implements Runnable, IRelayCat
 {
 	public class Message
 	{
 		private final String message;
 		private final String nick;
-		private final String me = RelayCat.this.getNick();
+		private final String me = RelayCat.this.bot.getNick();
 		private final String channel;
 		private final boolean action;
 		private boolean dispose = false;
@@ -63,7 +63,7 @@ public class RelayCat extends PircBot implements Runnable
 			if (message == null || message.length() == 0) return;
 			for (String s : message.split("\n"))
 			{
-				RelayCat.this.sendMessage(this.nick, s);
+				RelayCat.this.bot.sendMessage(this.nick, s);
 			}
 		}
 
@@ -71,7 +71,7 @@ public class RelayCat extends PircBot implements Runnable
 		{
 			if (action == null || action.length() == 0) return;
 			final String target = (this.channel == null ? this.nick : this.channel);
-			RelayCat.this.sendAction(target, action);
+			RelayCat.this.bot.sendAction(target, action);
 		}
 
 		public synchronized void replyToAll(String message)
@@ -83,13 +83,79 @@ public class RelayCat extends PircBot implements Runnable
 			}
 			for (String s : message.split("\n"))
 			{
-				RelayCat.this.sendMessage(this.channel, s);
+				RelayCat.this.bot.sendMessage(this.channel, s);
 			}
 		}
 
 		public void dispose()
 		{
 			this.dispose = true;
+		}
+	}
+
+	protected class CatBot extends PircBot
+	{
+		protected CatBot(String name)
+		{
+			this.setName(name);
+		}
+
+		@Override
+		public void onMessage(String channel, String sender, String login, String hostname, String message)
+		{
+			log.log(Level.FINE, "Message received from {0}/{1}",
+				new Object[]{sender, channel});
+			final Message m = new Message(message, sender, channel, false);
+			synchronized(srvs)
+			{
+				for (MessageService s : msrvs)
+				{
+					log.log(Level.FINE, "Message dispatched to {0}@{1}",
+						new Object[]{s.getClass().getSimpleName(), s.getId()});
+					try
+					{
+						s.handle(m);
+					}
+					catch (Throwable ex)
+					{
+						log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
+					}
+					if (m.dispose) break;
+				}
+			}
+		}
+
+		@Override
+		public void onPrivateMessage(String sender, String login, String hostname, String message)
+		{
+			onMessage(null, sender, login, hostname, message);
+		}
+
+		@Override
+		public void onAction(String sender, String login, String hostname, String target, String action)
+		{
+			final String channel = (target == getNick() ? null : target);
+
+			log.log(Level.FINE, "Action received from {0}/{1}",
+				new Object[]{sender, channel});
+			final Message m = new Message(action, sender, channel, true);
+			synchronized(srvs)
+			{
+				for (MessageService s : msrvs)
+				{
+					log.log(Level.FINE, "Message dispatched to {0}@{1}",
+						new Object[]{s.getClass().getSimpleName(), s.getId()});
+					try
+					{
+						s.handle(m);
+					}
+					catch (Throwable ex)
+					{
+						log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
+					}
+					if (m.dispose) break;
+				}
+			}
 		}
 	}
 
@@ -131,12 +197,15 @@ public class RelayCat extends PircBot implements Runnable
 	private final List<MessageService> msrvs = new ArrayList<MessageService>();
 	private boolean dispose = false;
 
+	private final CatBot bot;
+
 	public RelayCat(final String name, final String host, final List<String> channels)
 	{
 		if (name==null || name.length()==0) throw new IllegalArgumentException("Name must be a non-empty String");
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
 
-		this.setName(name);
+		bot = new CatBot(name);
+
 		this.host = host;
 
 		if (channels == null)
@@ -147,7 +216,7 @@ public class RelayCat extends PircBot implements Runnable
 		{
 			this.channels = channels;
 		}
-		this.setVerbose(false);
+		bot.setVerbose(false);
 	}
 
 	public void addService(Service s)
@@ -178,12 +247,12 @@ public class RelayCat extends PircBot implements Runnable
 	{
 		try
 		{
-			log.log(Level.INFO, "Connecting to '{0}'", host);
-			this.connect(host);
+			log.log(Level.INFO, "Connecting to ''{0}''", host);
+			bot.connect(host);
 			for (String channel : channels)
 			{
-				log.log(Level.INFO, "Joining '{0}'", channel);
-				this.joinChannel(channel);
+				log.log(Level.INFO, "Joining ''{0}''", channel);
+				bot.joinChannel(channel);
 			}
 			log.log(Level.INFO, "Operations Running!");
 			this.wait();
@@ -206,67 +275,9 @@ public class RelayCat extends PircBot implements Runnable
 			dispose = true;
 			for (Service s : srvs) s.shutdown();
 		}
-		this.quitServer();
-		this.disconnect();
-		this.dispose();
-	}
-
-	@Override
-	public void onMessage(String channel, String sender, String login, String hostname, String message)
-	{
-		log.log(Level.FINE, "Message received from {0}/{1}",
-		    new Object[]{sender, channel});
-		final Message m = new Message(message, sender, channel, false);
-		synchronized(srvs)
-		{
-			for (MessageService s : msrvs)
-			{
-				log.log(Level.FINE, "Message dispatched to {0}@{1}",
-				    new Object[]{s.getClass().getSimpleName(), s.getId()});
-				try
-				{
-					s.handle(m);
-				}
-				catch (Throwable ex)
-				{
-					log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
-				}
-				if (m.dispose) break;
-			}
-		}
-	}
-
-	@Override
-	public void onPrivateMessage(String sender, String login, String hostname, String message)
-	{
-		onMessage(null, sender, login, hostname, message);
-	}
-
-	@Override
-	public void onAction(String sender, String login, String hostname, String target, String action)
-	{
-		final String channel = (target == getNick() ? null : target);
-
-		log.log(Level.FINE, "Action received from {0}/{1}",
-		    new Object[]{sender, channel});
-		final Message m = new Message(action, sender, channel, true);
-		synchronized(srvs)
-		{
-			for (MessageService s : msrvs)
-			{
-				log.log(Level.FINE, "Message dispatched to {0}@{1}",
-				    new Object[]{s.getClass().getSimpleName(), s.getId()});
-				try
-				{
-					s.handle(m);
-				}
-				catch (Throwable ex)
-				{
-					log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
-				}
-				if (m.dispose) break;
-			}
-		}
+		bot.quitServer();
+		bot.disconnect();
+		bot.dispose();
 	}
 
 	public synchronized void shutdown()
@@ -274,5 +285,28 @@ public class RelayCat extends PircBot implements Runnable
 		this.notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
+	@Override
+	public void message(String target, String message)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void act(String target, String message)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void join(String channel)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public void leave(String channel)
+	{
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
 
