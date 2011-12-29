@@ -152,7 +152,7 @@ public class RelayCat implements Runnable, IRelayCat
 			{
 				for (MessageService s : msrvs)
 				{
-					log.log(Level.INFO, "Input dispatched to {0}", s.toString());
+					log.log(Level.FINE, "Input dispatched to {0}", s.toString());
 					try
 					{
 						s.handle(m);
