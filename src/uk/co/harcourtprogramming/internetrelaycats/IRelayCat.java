@@ -81,11 +81,12 @@ public interface IRelayCat
      */
 	public User[] names(String channel);
 	/**
-	 * <p>Issues a request for a list of all channels on the IRC server.</p>
-	 * <p>Note that certain channels, such as those marked as hidden,
-     * may not appear in channel listings.</p>
-	 * @return list of channels on the server
-	 * @deprecated Not yet implemented due to pircbots channel listings
+	 * <p>Returns an array of all channels that we are in.</p>
+	 * <p>Note that if you call this method immediately after joining a new
+	 * channel, the new channel may not appear in this array as it is not
+	 * possible to tell if the join was successful until a response is received
+	 * from the IRC server.</p>
+	 * @return list of channels we are connected to
 	 */
 	public String[] channels();
 }
