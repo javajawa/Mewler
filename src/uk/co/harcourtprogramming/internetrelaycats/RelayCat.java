@@ -134,7 +134,7 @@ public class RelayCat implements Runnable, IRelayCat
 		@Override
 		public void onAction(String sender, String login, String hostname, String target, String action)
 		{
-			final String channel = (target == getNick() ? null : target);
+			final String channel = (target.equals(getNick()) ? null : target);
 
 			log.log(Level.FINE, "Action received from {0}/{1}",
 				new Object[]{sender, channel});
