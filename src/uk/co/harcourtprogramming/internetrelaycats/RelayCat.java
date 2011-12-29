@@ -314,16 +314,32 @@ public class RelayCat implements Runnable, IRelayCat
 		this.notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
+	private final Object transmissionLock = new Object();
+
 	@Override
 	public void message(String target, String message)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
+		if (message == null || message.length() == 0) return;
+		synchronized (transmissionLock)
+		{
+			for (String line : message.split("\n"))
+			{
+				bot.sendMessage(target, line);
+			}
+		}
 	}
 
 	@Override
-	public void act(String target, String message)
+	public void act(String target, String action)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
+		if (action == null || action.length() == 0) return;
+		synchronized (transmissionLock)
+		{
+			bot.sendAction(target, action);
+		}
+
 	}
 
 	@Override
