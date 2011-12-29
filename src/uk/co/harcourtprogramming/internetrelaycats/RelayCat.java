@@ -96,6 +96,7 @@ public class RelayCat extends PircBot implements Runnable
 	private final static Logger log = Logger.getLogger("NetCat");
 	private final static Formatter form = new Formatter()
 	{
+		@Override
 		public String format(LogRecord l)
 		{
 			Calendar time = Calendar.getInstance();
@@ -172,6 +173,7 @@ public class RelayCat extends PircBot implements Runnable
 		}
 	}
 
+	@Override
 	public synchronized void run()
 	{
 		try
@@ -209,6 +211,7 @@ public class RelayCat extends PircBot implements Runnable
 		this.dispose();
 	}
 
+	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
 		log.log(Level.FINE, "Message received from {0}/{1}",
@@ -233,11 +236,13 @@ public class RelayCat extends PircBot implements Runnable
 		}
 	}
 
+	@Override
 	public void onPrivateMessage(String sender, String login, String hostname, String message)
 	{
 		onMessage(null, sender, login, hostname, message);
 	}
 
+	@Override
 	public void onAction(String sender, String login, String hostname, String target, String action)
 	{
 		final String channel = (target == getNick() ? null : target);
