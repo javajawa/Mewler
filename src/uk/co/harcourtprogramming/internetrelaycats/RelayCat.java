@@ -159,7 +159,7 @@ public class RelayCat implements Runnable, IRelayCat
 		}
 	}
 
-	private final static Logger log = Logger.getLogger("NetCat");
+	private final static Logger log = Logger.getLogger("InternetRelayCat");
 	private final static Formatter form = new Formatter()
 	{
 		@Override
@@ -168,19 +168,8 @@ public class RelayCat implements Runnable, IRelayCat
 			Calendar time = Calendar.getInstance();
 			time.setTimeInMillis(l.getMillis());
 
-			StringBuilder b = new StringBuilder();
-
-			b.append('[');
-			b.append(time.get(Calendar.HOUR_OF_DAY));
-			b.append(':');
-			b.append(time.get(Calendar.MINUTE));
-			b.append(' ');
-			b.append(l.getLevel().getLocalizedName());
-			b.append("] >> ");
-			b.append(formatMessage(l));
-			b.append('\n');
-
-			return b.toString();
+			return String.format("[%2$tR %1$s] %3$s\n",
+			    l.getLevel().getLocalizedName(), time, formatMessage(l));
 		}
 	};
 	static
