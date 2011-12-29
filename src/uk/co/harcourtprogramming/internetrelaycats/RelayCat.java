@@ -140,62 +140,48 @@ public class RelayCat implements Runnable, IRelayCat
 			this.setName(name);
 		}
 
-		@Override
-		public void onMessage(String channel, String sender, String login, String hostname, String message)
+		@SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
+		public void onInput(boolean action, String sender, String channel, String data)
 		{
-			log.log(Level.FINE, "Message received from {0}/{1}",
-				new Object[]{sender, channel});
-			final Message m = new Message(message, sender, channel, false);
+			log.log(Level.FINE, "Input recieved from {0} (channel {1})",
+			    new Object[] {sender, channel});
+
+			final Message m = new Message(data, sender, channel, action);
+
 			synchronized(srvs)
 			{
 				for (MessageService s : msrvs)
 				{
-					log.log(Level.FINE, "Message dispatched to {0}@{1}",
-						new Object[]{s.getClass().getSimpleName(), s.getId()});
+					log.log(Level.INFO, "Input dispatched to {0}", s.toString());
 					try
 					{
 						s.handle(m);
 					}
 					catch (Throwable ex)
 					{
-						log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
+						log.log(Level.SEVERE, "Error whilst passing input to " + s.toString(), ex);
 					}
 					if (m.dispose) break;
 				}
 			}
+		}
+
+		@Override
+		public void onMessage(String channel, String sender, String login, String hostname, String message)
+		{
+			onInput(false, sender, channel, message);
 		}
 
 		@Override
 		public void onPrivateMessage(String sender, String login, String hostname, String message)
 		{
-			onMessage(null, sender, login, hostname, message);
+			onInput(false, sender, null, message);
 		}
 
 		@Override
 		public void onAction(String sender, String login, String hostname, String target, String action)
 		{
-			final String channel = (target.equals(getNick()) ? null : target);
-
-			log.log(Level.FINE, "Action received from {0}/{1}",
-				new Object[]{sender, channel});
-			final Message m = new Message(action, sender, channel, true);
-			synchronized(srvs)
-			{
-				for (MessageService s : msrvs)
-				{
-					log.log(Level.FINE, "Message dispatched to {0}@{1}",
-						new Object[]{s.getClass().getSimpleName(), s.getId()});
-					try
-					{
-						s.handle(m);
-					}
-					catch (Throwable ex)
-					{
-						log.log(Level.SEVERE, "Error whilst passing message to " + s.getClass().getSimpleName() + '@' + s.getId(), ex);
-					}
-					if (m.dispose) break;
-				}
-			}
+			onInput(true, sender, (target.equals(getNick()) ? null : target), action);
 		}
 	}
 
