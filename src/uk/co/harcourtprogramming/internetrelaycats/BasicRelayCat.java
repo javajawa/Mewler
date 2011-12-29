@@ -18,7 +18,7 @@ import org.jibble.pircbot.User;
 /**
  * <p>The main class for InternetRelayCats</p>
  */
-public class RelayCat implements Runnable, IRelayCat
+public class BasicRelayCat implements Runnable, IRelayCat
 {
 
 	/**
@@ -37,9 +37,9 @@ public class RelayCat implements Runnable, IRelayCat
 		 */
 		private final String nick;
 		/**
-		 * <p>The nick of the {@link RelayCat}</p>
+		 * <p>The nick of the {@link BasicRelayCat}</p>
 		 */
-		private final String me = RelayCat.this.getNick();
+		private final String me = BasicRelayCat.this.getNick();
 		/**
 		 * <p>The channel that the message arrived in.</p>
 		 * <p>This is null if the message arrived directly.</p>
@@ -163,40 +163,40 @@ public class RelayCat implements Runnable, IRelayCat
 		public void message(String target, String message)
 		{
 			if (dispose) return;
-			RelayCat.this.message(target, message);
+			BasicRelayCat.this.message(target, message);
 		}
 
 		@Override
 		public void act(String target, String message)
 		{
 			if (dispose) return;
-			RelayCat.this.act(target, nick);
+			BasicRelayCat.this.act(target, nick);
 		}
 
 		@Override
 		public void join(String channel)
 		{
 			if (dispose) return;
-			RelayCat.this.join(channel);
+			BasicRelayCat.this.join(channel);
 		}
 
 		@Override
 		public void leave(String channel)
 		{
 			if (dispose) return;
-			RelayCat.this.leave(channel);
+			BasicRelayCat.this.leave(channel);
 		}
 
 		@Override
 		public User[] names(String channel)
 		{
-			return RelayCat.this.names(channel);
+			return BasicRelayCat.this.names(channel);
 		}
 
 		@Override
 		public String[] channels()
 		{
-			return RelayCat.this.channels();
+			return BasicRelayCat.this.channels();
 		}
 	}
 
@@ -318,12 +318,12 @@ public class RelayCat implements Runnable, IRelayCat
 	private final CatBot bot;
 
 	/**
-	 * <p>Creates a RelayCat instance</p>
+	 * <p>Creates a BasicRelayCat instance</p>
 	 * <p>The instance is initialised, and services can be added, but does not
 	 * connect to the server specified in host until it is run, either by
 	 * calling the {@link #run() run} method directly, or executing it in a new
 	 * {@link Thread} with:
-	 * <pre>    new Thread(RelayCat).start();</pre>
+	 * <pre>    new Thread(BasicRelayCat).start();</pre>
 	 * </p>
 	 * <p>A list of channels can be supplied to the constructor so that they
 	 * are joined when the server connection is made. Other channels can be
@@ -337,7 +337,7 @@ public class RelayCat implements Runnable, IRelayCat
 	 * is established
 	 * @throws IllegalArgumentException if the name or host are not supplied
 	 */
-	public RelayCat(final String name, final String host, final List<String> channels)
+	public BasicRelayCat(final String name, final String host, final List<String> channels)
 	{
 		if (name==null || name.length()==0) throw new IllegalArgumentException("Name must be a non-empty String");
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
@@ -358,7 +358,7 @@ public class RelayCat implements Runnable, IRelayCat
 	}
 
 	/**
-	 * <p>Adds a service to the RelayCat</p>
+	 * <p>Adds a service to the BasicRelayCat</p>
 	 * <p>{@link MessageService Message Services} will be forwarded inputs</p>
 	 * <p>{@link ExternalService External Services} will be correctly
 	 * initialised, and their threads started</p>
@@ -396,7 +396,7 @@ public class RelayCat implements Runnable, IRelayCat
 	 * <p>Runs the bot</p>
 	 * <p>Not that this function will block until {@link #shutdown()} is called;
 	 * thus is it recommend to run the bot in a new thread:
-	 * <pre>    new Thread(RelayCat).start();</pre></p>
+	 * <pre>    new Thread(BasicRelayCat).start();</pre></p>
 	 */
 	@Override
 	public synchronized void run()

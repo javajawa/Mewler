@@ -3,7 +3,7 @@ package uk.co.harcourtprogramming.internetrelaycats;
 import java.util.logging.Level;
 
 /**
- * <p>An external service is a {@link RelayCat} {@link Service} that runs in a
+ * <p>An external service is a {@link BasicRelayCat} {@link Service} that runs in a
  * separate thread from the IRC interface.</p>
  * <p>Currently, it is unable to receive messages (although, they can be
  * forwarded with a {@link MessageService}</p>
@@ -17,7 +17,7 @@ public abstract class ExternalService extends Service implements Runnable
 	 */
 	private final Thread t = new Thread(this);
 	/**
-	 * <p>Reference to the {@link RelayCat} instance that is using this
+	 * <p>Reference to the {@link BasicRelayCat} instance that is using this
 	 * service.</p>
 	 * <p>This only will be null until the instance starts the thread; this must
 	 * always be tested for.</p>
@@ -27,16 +27,16 @@ public abstract class ExternalService extends Service implements Runnable
 	/**
 	 * <p>Create the external service</p>
 	 * <p>The {@link #t thread} is created at this time, and will be {@link
-	 * Thread#start() started} when the {@link RelayCat} {@link #inst
+	 * Thread#start() started} when the {@link BasicRelayCat} {@link #inst
 	 * instance} is initialised.</p>
-	 * <p>External services can only be attached to one {@link RelayCat}
+	 * <p>External services can only be attached to one {@link BasicRelayCat}
 	 * instance; however, they still need to be added after creation with
-	 * {@link RelayCat#addService(uk.co.harcourtprogramming.internetrelaycats.Service)
-	 * RelayCat.addService}. Adding the service will cause the service's
+	 * {@link BasicRelayCat#addService(uk.co.harcourtprogramming.internetrelaycats.Service)
+	 * BasicRelayCat.addService}. Adding the service will cause the service's
 	 * thread to be run.</p>
 	 * @param inst the instance that this external service will work with
 	 */
-	public ExternalService(RelayCat inst)
+	public ExternalService(BasicRelayCat inst)
 	{
 		super();
 		t.setDaemon(true);
