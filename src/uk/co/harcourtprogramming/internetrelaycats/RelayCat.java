@@ -14,7 +14,6 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.User;
-import sun.awt.windows.ThemeReader;
 
 /**
  * <p>The main class for InternetRelayCats</p>
