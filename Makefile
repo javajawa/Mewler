@@ -7,12 +7,12 @@ JAR=jar
 BUILD=build
 SRC=src
 PACKAGE=dist
-PACKAGEJAR=$(PACKAGE)/netcat.jar
+PACKAGEJAR=$(PACKAGE)/irc.jar
 LIBS=$(wildcard lib/*.jar)
 
 CP=$(SRC):$(LIBS: =:)
 
-FILES=$(wildcard $(SRC)/uk/co/harcourtprogramming/netcat/*.java)
+FILES=$(wildcard $(SRC)/uk/co/harcourtprogramming/internetrelaycats/*.java)
 CLASS=$(patsubst $(SRC)/%.java,$(BUILD)/%.class,$(FILES))
 
 package: $(PACKAGEJAR)
