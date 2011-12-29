@@ -53,9 +53,9 @@ public class RelayCat implements Runnable, IRelayCat
 			return this.nick;
 		}
 
-		public String getMyNick()
+		public String getNick()
 		{
-			return this.me;
+			return me;
 		}
 
 		public synchronized void reply(String message)
@@ -90,6 +90,46 @@ public class RelayCat implements Runnable, IRelayCat
 		public void dispose()
 		{
 			this.dispose = true;
+		}
+
+		@Override
+		public void message(String target, String message)
+		{
+			if (dispose) return;
+			RelayCat.this.message(target, message);
+		}
+
+		@Override
+		public void act(String target, String message)
+		{
+			if (dispose) return;
+			RelayCat.this.act(target, nick);
+		}
+
+		@Override
+		public void join(String channel)
+		{
+			if (dispose) return;
+			RelayCat.this.join(channel);
+		}
+
+		@Override
+		public void leave(String channel)
+		{
+			if (dispose) return;
+			RelayCat.this.leave(channel);
+		}
+
+		@Override
+		public User[] names(String channel)
+		{
+			return RelayCat.this.names(channel);
+		}
+
+		@Override
+		public String[] channels()
+		{
+			return RelayCat.this.channels();
 		}
 	}
 
@@ -289,13 +329,31 @@ public class RelayCat implements Runnable, IRelayCat
 	@Override
 	public void join(String channel)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		bot.joinChannel(channel);
 	}
 
 	@Override
 	public void leave(String channel)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		bot.partChannel(channel);
+	}
+
+	@Override
+	public String getNick()
+	{
+		return bot.getNick();
+	}
+
+	@Override
+	public User[] names(String channel)
+	{
+		return bot.getUsers(channel);
+	}
+
+	@Override
+	public String[] channels()
+	{
+		return bot.getChannels();
 	}
 }
 

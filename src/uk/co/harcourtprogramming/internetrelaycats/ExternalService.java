@@ -66,11 +66,7 @@ public abstract class ExternalService extends Service implements Runnable
 	{
 		log(Level.FINE, " -> {0}: {1}", new Object[]{target, message});
 		if (inst == null) return;
-		if (message == null) return;
-		for (String line : message.split("\n"))
-		{
-			inst.sendMessage(target, line);
-		}
+		inst.message(target, message);
 	}
 
 	/**
