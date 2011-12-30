@@ -12,6 +12,5 @@ public interface MessageService
 	 * <p>Handle an input (message, action, etc.)</p>
 	 * @param m The message to handle
 	 */
-	public void handle(BasicRelayCat.Message m);
+	public void handle(Message m);
 }
-

@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 import java.util.logging.LogRecord;
 import java.util.logging.Level;
 import java.io.IOException;
-import org.jibble.pircbot.Colors;
-import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.User;
 
@@ -20,253 +18,6 @@ import org.jibble.pircbot.User;
  */
 public class BasicRelayCat implements Runnable, RelayCat
 {
-
-	/**
-	 * <p>Class that represents a message or action sent to the instance, or a
-	 * channel that this instance is in</p>
-	 */
-	@SuppressWarnings("PublicInnerClass")
-	public class Message implements RelayCat
-	{
-		/**
-		 * <p>The message that was sent</p>
-		 */
-		private final String message;
-		/**
-		 * <p>The nick of the sender</p>
-		 */
-		private final String nick;
-		/**
-		 * <p>The nick of the {@link BasicRelayCat}</p>
-		 */
-		private final String me = BasicRelayCat.this.getNick();
-		/**
-		 * <p>The channel that the message arrived in.</p>
-		 * <p>This is null if the message arrived directly.</p>
-		 */
-		private final String channel;
-		/**
-		 * <p>Whether this input was an action (true) or a message (false)</p>
-		 */
-		private final boolean action;
-		/**
-		 * <p>Whether a service has marked this message for disposal</p>
-		 */
-		private boolean dispose = false;
-
-		/**
-		 * Creates a new message object
-		 * @param message the input data
-		 * @param nick the source nick
-		 * @param channel the source channel (or null if sent directly)
-		 * @param action whether this was an action or a message
-		 */
-		private Message(String message, String nick, String channel, boolean action)
-		{
-			this.message = Colors.removeFormattingAndColors(message);
-			this.nick = nick;
-			this.channel = channel;
-			this.action = action;
-		}
-
-		/**
-		 * @return if this input is an action (otherwise, it is a message)
-		 */
-		public boolean isAction()
-		{
-			return action;
-		}
-
-		/**
-		 * @return
-		 */
-		public String getMessage()
-		{
-			return message;
-		}
-
-		/**
-		 * @return the channel this input came via, or null if it was sent directly
-		 */
-		public String getChannel()
-		{
-			return channel;
-		}
-
-		/**
-		 * @return the nick of the user that sent this message
-		 */
-		public String getSender()
-		{
-			return nick;
-		}
-
-		@Override
-		public String getNick()
-		{
-			return me;
-		}
-
-		/**
-		 * Convenience method for messaging the sender directly
-		 * @param message the message text
-		 * @see #message(java.lang.String, java.lang.String) message
-		 */
-		public synchronized void reply(String message)
-		{
-			message(nick, message);
-		}
-
-		/**
-		 * <p>Convenience method for sending action to the same scope as this
-		 * message arrived</p>
-		 * @param action the action text to send
-		 * @see #act(java.lang.String, java.lang.String) act()
-		 * @see #replyToAll(java.lang.String) replyToAll()
-		 */
-		public synchronized void act(String action)
-		{
-			final String target = (this.channel == null ? this.nick : this.channel);
-			act(target, action);
-		}
-
-		/**
-		 * <p>Convenience method for messaging the user or channel this message
-		 * was received from</p>
-		 * @param message the message text
-		 * @see #message(java.lang.String, java.lang.String) message()
-		 */
-		public synchronized void replyToAll(String message)
-		{
-			if (channel == null)
-			{
-				message(nick, message);
-			}
-			else
-			{
-				message(channel, message);
-			}
-		}
-
-		/**
-		 * <p>Marks this message as handled</p>
-		 * <p>It will be passed to no more Services,
-		 * and the messaging and channel functions of this class will perform
-		 * no actions.</p>
-		 */
-		public void dispose()
-		{
-			dispose = true;
-		}
-
-		@Override
-		public void message(String target, String message)
-		{
-			if (dispose) return;
-			BasicRelayCat.this.message(target, message);
-		}
-
-		@Override
-		public void act(String target, String message)
-		{
-			if (dispose) return;
-			BasicRelayCat.this.act(target, nick);
-		}
-
-		@Override
-		public void join(String channel)
-		{
-			if (dispose) return;
-			BasicRelayCat.this.join(channel);
-		}
-
-		@Override
-		public void leave(String channel)
-		{
-			if (dispose) return;
-			BasicRelayCat.this.leave(channel);
-		}
-
-		@Override
-		public User[] names(String channel)
-		{
-			return BasicRelayCat.this.names(channel);
-		}
-
-		@Override
-		public String[] channels()
-		{
-			return BasicRelayCat.this.channels();
-		}
-	}
-
-	/**
-	 * <p>Internal wrapper for {@link PircBot} that allows us to hide much of
-	 * the 'functionality'</p>
-	 */
-	@SuppressWarnings("ProtectedInnerClass")
-	protected class CatBot extends PircBot
-	{
-		/**
-		 * Create a new bot with a given name
-		 * @param name the name of the bot
-		 */
-		protected CatBot(String name)
-		{
-			this.setName(name);
-		}
-
-		/**
-		 * Unified function for handling input data
-		 * @param action whether the input is an action (or a message)
-		 * @param sender the nick which sent the input
-		 * @param channel the channel the input was received in (or null)
-		 * @param data the text of the message
-		 */
-		@SuppressWarnings("AccessingNonPublicFieldOfAnotherObject")
-		public void onInput(boolean action, String sender, String channel, String data)
-		{
-			log.log(Level.FINE, "Input recieved from {0} (channel {1})",
-			    new Object[] {sender, channel});
-
-			final Message m = new Message(data, sender, channel, action);
-
-			synchronized(srvs)
-			{
-				for (MessageService s : msrvs)
-				{
-					log.log(Level.FINE, "Input dispatched to {0}", s.toString());
-					try
-					{
-						s.handle(m);
-					}
-					catch (Throwable ex)
-					{
-						log.log(Level.SEVERE, "Error whilst passing input to " + s.toString(), ex);
-					}
-					if (m.dispose) break;
-				}
-			}
-		}
-
-		@Override
-		public void onMessage(String channel, String sender, String login, String hostname, String message)
-		{
-			onInput(false, sender, channel, message);
-		}
-
-		@Override
-		public void onPrivateMessage(String sender, String login, String hostname, String message)
-		{
-			onInput(false, sender, null, message);
-		}
-
-		@Override
-		public void onAction(String sender, String login, String hostname, String target, String action)
-		{
-			onInput(true, sender, (target.equals(getNick()) ? null : target), action);
-		}
-	}
 
 	/**
 	 * <p>The logger for the bot</p>
@@ -315,7 +66,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	/**
 	 * <p>instance of the underlying bot interface</p>
 	 */
-	private final CatBot bot;
+	protected final CatBot bot;
 
 	/**
 	 * <p>Creates a BasicRelayCat instance</p>
@@ -330,7 +81,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * joined later with {@link RelayCat#join(java.lang.String)}
 	 * @todo Make a defensive copy of the channel list to prevent a concurrent
 	 * modification error if a new channel is added whilst they're being
-	 * processed in run
+	 * processed in run</p>
 	 * @param name the name for the bot
 	 * @param host the host to connect to
 	 * @param channels a list of channels to connect to as soon as a connection
@@ -339,12 +90,14 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 */
 	public BasicRelayCat(final String name, final String host, final List<String> channels)
 	{
-		if (name==null || name.length()==0) throw new IllegalArgumentException("Name must be a non-empty String");
+		super();
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
-
-		bot = new CatBot(name);
+		if (name==null || name.length() == 0)  throw new IllegalArgumentException("Name must be supplied");
 
 		this.host = host;
+		bot = new CatBot(name);
+		bot.setInst(this);
+		bot.setVerbose(false);
 
 		if (channels == null)
 		{
@@ -354,7 +107,47 @@ public class BasicRelayCat implements Runnable, RelayCat
 		{
 			this.channels = channels;
 		}
-		bot.setVerbose(false);
+	}
+
+	/**
+	 * <p>Creates a BasicRelayCat instance</p>
+	 * <p>This constructor is for sub classes to override and supply their own
+	 * wrapper to {@link PircBot} which, for compatibility reasons, much extend
+	 * {@link CatBot}. Note that none of CatBot's methods are private or final.
+	 * </p>
+	 * <p>The instance is initialised, and services can be added, but does not
+	 * connect to the server specified in host until it is run, either by
+	 * calling the {@link #run() run} method directly, or executing it in a new
+	 * {@link Thread} with:
+	 * <pre>    new Thread(BasicRelayCat).start();</pre>
+	 * </p>
+	 * <p>A list of channels can be supplied to the constructor so that they
+	 * are joined when the server connection is made. Other channels can be
+	 * joined later with {@link RelayCat#join(java.lang.String)}
+	 * @todo Make a defensive copy of the channel list to prevent a concurrent
+	 * modification error if a new channel is added whilst they're being
+	 * processed in run</p>
+	 * @param bot the bot to be used
+	 * @param host the host to connect to
+	 * @param channels a list of channels to connect to as soon as a connection
+	 * is established
+	 */
+	protected BasicRelayCat(CatBot bot, final String host, final List<String> channels)
+	{
+		super();
+		if (host==null) throw new IllegalArgumentException("Host must be supplied");
+
+		this.host = host;
+		this.bot = bot;
+
+		if (channels == null)
+		{
+			this.channels = new ArrayList<String>(0);
+		}
+		else
+		{
+			this.channels = channels;
+		}
 	}
 
 	/**
@@ -428,7 +221,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 		// Shutdown procedure :)
 		synchronized(srvs)
 		{
-			dispose = true;
+			setDispose(true);
 			for (Service s : srvs) s.shutdown();
 		}
 		bot.quitServer();
@@ -505,5 +298,41 @@ public class BasicRelayCat implements Runnable, RelayCat
 	{
 		return bot.getChannels();
 	}
-}
 
+		/**
+	 * <p>Flag to denote that the bot is currently exiting</p>
+	 * @return the dispose
+	 */
+	protected boolean isDispose()
+	{
+		return dispose;
+	}
+
+	/**
+	 * <p>Flag to denote that the bot is currently exiting</p>
+	 * @param dispose the dispose to set
+	 */
+	protected void setDispose(boolean dispose)
+	{
+		this.dispose = dispose;
+	}
+
+	/**
+	 * <p>The list of currently activated {@link Service Services}</p>
+	 * @return the srvs
+	 */
+	protected List<Service> getSrvs()
+	{
+		return srvs;
+	}
+
+	/**
+	 * <p>The list of currently activated {@link MessageService MessageServices}</p>
+	 * @return the msrvs
+	 */
+	protected List<MessageService> getMsrvs()
+	{
+		return msrvs;
+	}
+
+}
