@@ -210,9 +210,15 @@ public class BasicRelayCat implements Runnable, RelayCat
 		}
 		catch (InterruptedException ex)
 		{
+			shutdown();
 		}
+	}
 
-		// Shutdown procedure :)
+	/**
+	 * <p>Unblocks a call to {@link #run() run}, causing the bot to exit</p>
+	 */
+	public synchronized void shutdown()
+	{
 		synchronized(srvs)
 		{
 			setDispose(true);
@@ -221,13 +227,6 @@ public class BasicRelayCat implements Runnable, RelayCat
 		bot.quitServer();
 		bot.disconnect();
 		bot.dispose();
-	}
-
-	/**
-	 * <p>Unblocks a call to {@link #run() run}, causing the bot to exit</p>
-	 */
-	public synchronized void shutdown()
-	{
 		notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
