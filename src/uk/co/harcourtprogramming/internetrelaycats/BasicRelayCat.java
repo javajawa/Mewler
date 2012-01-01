@@ -78,10 +78,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * </p>
 	 * <p>A list of channels can be supplied to the constructor so that they
 	 * are joined when the server connection is made. Other channels can be
-	 * joined later with {@link RelayCat#join(java.lang.String)}
-	 * @todo Make a defensive copy of the channel list to prevent a concurrent
-	 * modification error if a new channel is added whilst they're being
-	 * processed in run</p>
+	 * joined later with {@link RelayCat#join(java.lang.String)}</p>
 	 * @param name the name for the bot
 	 * @param host the host to connect to
 	 * @param channels a list of channels to connect to as soon as a connection
@@ -105,7 +102,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 		}
 		else
 		{
-			this.channels = channels;
+			this.channels = new ArrayList<String>(channels);
 		}
 	}
 
@@ -123,10 +120,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * </p>
 	 * <p>A list of channels can be supplied to the constructor so that they
 	 * are joined when the server connection is made. Other channels can be
-	 * joined later with {@link RelayCat#join(java.lang.String)}
-	 * @todo Make a defensive copy of the channel list to prevent a concurrent
-	 * modification error if a new channel is added whilst they're being
-	 * processed in run</p>
+	 * joined later with {@link RelayCat#join(java.lang.String)}</p>
 	 * @param bot the bot to be used
 	 * @param host the host to connect to
 	 * @param channels a list of channels to connect to as soon as a connection
@@ -146,7 +140,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 		}
 		else
 		{
-			this.channels = channels;
+			this.channels = new ArrayList<String>(channels);
 		}
 	}
 
