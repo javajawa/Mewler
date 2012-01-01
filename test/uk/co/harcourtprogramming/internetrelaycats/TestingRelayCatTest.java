@@ -22,19 +22,11 @@ public class TestingRelayCatTest
 	/**
 	 * Test of run method, of class TestingRelayCat.
 	 */
-	@Test
+	@Test(expected=UnsupportedOperationException.class)
 	public void testRun()
 	{
 		TestingRelayCat instance = new TestingRelayCat();
-		try
-		{
-			instance.run();
-		}
-		catch (UnsupportedOperationException ex)
-		{
-			return;
-		}
-		fail("Run was succesfully called");
+		instance.run();
 	}
 
 	/**
