@@ -16,7 +16,7 @@ public class CatBot extends PircBot
 	/**
 	 * Shared logger with {@link BasicRelayCat}
 	 */
-	private final static Logger log = Logger.getLogger("IntertnetRelayCats.RelayCat");
+	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
 
 	/**
 	 * Create a new bot with a given name

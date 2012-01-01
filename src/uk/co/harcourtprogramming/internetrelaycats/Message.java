@@ -162,7 +162,7 @@ public class Message implements RelayCat
 	public void act(String target, String message)
 	{
 		if (dispose) return;
-		inst.act(target, nick);
+		inst.act(target, message);
 	}
 
 	@Override
