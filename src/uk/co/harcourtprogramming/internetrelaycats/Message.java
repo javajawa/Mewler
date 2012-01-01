@@ -5,7 +5,12 @@ import org.jibble.pircbot.User;
 public class Message implements RelayCat
 {
 	/**
-	 * <p>The message that was sent</p>
+	 * <p>The raw message that was sent, including escape characters</p>
+	 */
+	private final String raw;
+	/**
+	 * <p>The text of the message</p>
+	 * <p>Color and font escape codes have been removed</p>
 	 */
 	private final String message;
 	/**
@@ -47,6 +52,7 @@ public class Message implements RelayCat
 	{
 		this.inst = inst;
 		this.me = inst.getNick();
+		this.raw = message;
 		this.message = Colors.removeFormattingAndColors(message);
 		this.nick = nick;
 		this.channel = channel;
@@ -59,6 +65,15 @@ public class Message implements RelayCat
 	public boolean isAction()
 	{
 		return action;
+	}
+
+	/**
+	 * <p>The raw message that was sent, including escape characters</p>
+	 * @return the raw
+	 */
+	public String getRaw()
+	{
+		return raw;
 	}
 
 	/**
