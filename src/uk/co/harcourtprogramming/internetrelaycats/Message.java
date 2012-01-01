@@ -1,15 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.co.harcourtprogramming.internetrelaycats;
 import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.User;
-/**
- *
- * @author Benedict
- */
-@SuppressWarnings(value = "PublicInnerClass")
+
 public class Message implements RelayCat
 {
 	/**
@@ -70,7 +62,9 @@ public class Message implements RelayCat
 	}
 
 	/**
-	 * @return
+	 * <p>The text of the message</p>
+	 * <p>Color and font escape codes have been removed</p>
+	 * @return the message
 	 */
 	public String getMessage()
 	{
@@ -191,6 +185,9 @@ public class Message implements RelayCat
 		return inst.channels();
 	}
 
+	/**
+	 * @return whether this Message has been disposed
+	 */
 	public boolean isDisposed()
 	{
 		return dispose;
