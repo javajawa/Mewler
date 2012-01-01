@@ -1,6 +1,7 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>An external service is a {@link BasicRelayCat} {@link Service} that runs in a
@@ -13,9 +14,25 @@ import java.util.logging.Level;
 public abstract class ExternalService extends Service implements Runnable
 {
 	/**
-	 * The thread that this Service will run in
+	 * <p>The thread group for the primary external service threads</p>
 	 */
-	private final Thread t = new Thread(this);
+	private final static ThreadGroup THREAD_GROUP =
+		new ThreadGroup("ExternalServices")
+		{
+			@Override
+			public void uncaughtException(Thread t, Throwable e)
+			{
+				Logger.getLogger("InternetRelayCats.Service").log(
+					Level.SEVERE,
+					"Uncaught Exception in " + t.getName(),
+					e
+				);
+			}
+		};
+	/**
+	 * <p>The thread that this Service will run in</p>
+	 */
+	private final Thread t;
 	/**
 	 * <p>Reference to the {@link BasicRelayCat} instance that is using this
 	 * service.</p>
@@ -39,16 +56,8 @@ public abstract class ExternalService extends Service implements Runnable
 	public ExternalService(BasicRelayCat inst)
 	{
 		super();
+		t = new Thread(THREAD_GROUP, this, super.toString());
 		t.setDaemon(true);
-		t.setName(this.getClass().getSimpleName() + '@' + this.getId());
-		t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-
-			@Override
-			public void uncaughtException(Thread thread, Throwable thrwbl)
-			{
-				ExternalService.this.log(Level.SEVERE, "Uncaught Exception", thrwbl);
-			}
-		});
 		this.inst = inst;
 	}
 
