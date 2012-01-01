@@ -72,25 +72,4 @@ public class ServiceTest
 		{
 		}
 	}
-
-	private class ShutdownTestSerivce extends Service
-	{
-		@Override
-		public void shutdown()
-		{
-			throw new RuntimeException(new ShutdownWasCalledException());
-		}
-	}
-
-	/**
-	 * Thrown in {@link ShutdownTestSerivce} when the shutdown method is called.
-	 * Due to the lack of return type, etc, the Exceptional programming pattern
-	 * is use to check that the method is invoked
-	 */
-	private class ShutdownWasCalledException extends Exception
-	{
-		private ShutdownWasCalledException()
-		{
-		}
-	}
 }
