@@ -48,6 +48,7 @@ public class CatBot extends PircBot
 	public void onInput(Message m)
 	{
 		log.log(Level.FINE, "Input recieved: {0}", m);
+		if (inst == null) return;
 		synchronized (inst.getSrvs())
 		{
 			for (MessageService s : inst.getMsrvs())
