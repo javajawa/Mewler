@@ -30,6 +30,14 @@ public abstract class Service
 		if (lastId == 0) throw new Error("Out of available service ids");
 		return lastId;
 	}
+	/**
+	 * @deprecated for testing use <b>only</b>
+	 * @return the last assigned id
+	 */
+	static synchronized int lastId()
+	{
+		return lastId;
+	}
 
 	/**
 	 * Assign the id to this service

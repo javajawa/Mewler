@@ -21,10 +21,14 @@ public class ServiceTest
 	{
 		Service instance = new ServiceImpl();
 
-		int expResult = 1;
-		int result = instance.getId();
+		@SuppressWarnings("deprecation") // Testing only function
+		int expResult = Service.lastId();
 
-		assertEquals(expResult, result);
+		assertEquals(expResult, instance.getId());
+
+		instance = new ServiceImpl();
+		assertEquals(expResult+1, instance.getId());
+
 	}
 
 	/**
