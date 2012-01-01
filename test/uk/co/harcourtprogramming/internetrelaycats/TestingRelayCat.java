@@ -138,4 +138,15 @@ public class TestingRelayCat extends BasicRelayCat
 	{
 		bot.onAction(sender, null, null, (channel==null ? NAME : channel), line);
 	}
+
+	@Override
+	public synchronized void shutdown()
+	{
+		synchronized(getSrvs())
+		{
+			setDispose(true);
+			for (Service s : getSrvs()) s.shutdown();
+		}
+	}
+
 }
