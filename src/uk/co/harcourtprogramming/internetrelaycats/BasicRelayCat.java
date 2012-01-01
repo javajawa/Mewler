@@ -212,6 +212,9 @@ public class BasicRelayCat implements Runnable, RelayCat
 		{
 			shutdown();
 		}
+		bot.quitServer();
+		bot.disconnect();
+		bot.dispose();
 	}
 
 	/**
@@ -224,9 +227,6 @@ public class BasicRelayCat implements Runnable, RelayCat
 			setDispose(true);
 			for (Service s : srvs) s.shutdown();
 		}
-		bot.quitServer();
-		bot.disconnect();
-		bot.dispose();
 		notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
