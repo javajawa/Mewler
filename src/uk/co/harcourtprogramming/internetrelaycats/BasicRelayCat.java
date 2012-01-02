@@ -1,5 +1,6 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -10,8 +11,6 @@ import java.util.logging.Logger;
 import java.util.logging.LogRecord;
 import java.util.logging.Level;
 import java.io.IOException;
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.User;
 
 /**
  * <p>The main class for InternetRelayCats</p>
@@ -46,6 +45,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * <p>The host to which we shall connect to when the the thread is run</p>
 	 */
 	private final String host;
+	private final String name;
 	/**
 	 * <p>A list of channels to connect to when the thread is run</p>
 	 */
@@ -66,7 +66,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	/**
 	 * <p>instance of the underlying bot interface</p>
 	 */
-	protected final CatBot bot;
+	protected CatBot bot;
 
 	/**
 	 * <p>Creates a BasicRelayCat instance</p>
@@ -85,54 +85,14 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * is established
 	 * @throws IllegalArgumentException if the name or host are not supplied
 	 */
-	public BasicRelayCat(final String name, final String host, final List<String> channels)
+	public BasicRelayCat(final String name, final String host, final List<String> channels) throws UnknownHostException
 	{
 		super();
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
 		if (name==null || name.length() == 0)  throw new IllegalArgumentException("Name must be supplied");
 
 		this.host = host;
-		bot = new CatBot(name);
-		bot.setInst(this);
-		bot.setVerbose(false);
-
-		if (channels == null)
-		{
-			this.channels = new ArrayList<String>(0);
-		}
-		else
-		{
-			this.channels = new ArrayList<String>(channels);
-		}
-	}
-
-	/**
-	 * <p>Creates a BasicRelayCat instance</p>
-	 * <p>This constructor is for sub classes to override and supply their own
-	 * wrapper to {@link PircBot} which, for compatibility reasons, much extend
-	 * {@link CatBot}. Note that none of CatBot's methods are private or final.
-	 * </p>
-	 * <p>The instance is initialised, and services can be added, but does not
-	 * connect to the server specified in host until it is run, either by
-	 * calling the {@link #run() run} method directly, or executing it in a new
-	 * {@link Thread} with:
-	 * <pre>    new Thread(BasicRelayCat).start();</pre>
-	 * </p>
-	 * <p>A list of channels can be supplied to the constructor so that they
-	 * are joined when the server connection is made. Other channels can be
-	 * joined later with {@link RelayCat#join(java.lang.String)}</p>
-	 * @param bot the bot to be used
-	 * @param host the host to connect to
-	 * @param channels a list of channels to connect to as soon as a connection
-	 * is established
-	 */
-	protected BasicRelayCat(CatBot bot, final String host, final List<String> channels)
-	{
-		super();
-		if (host==null) throw new IllegalArgumentException("Host must be supplied");
-
-		this.host = host;
-		this.bot = bot;
+		this.name = name;
 
 		if (channels == null)
 		{
@@ -179,6 +139,11 @@ public class BasicRelayCat implements Runnable, RelayCat
 		}
 	}
 
+	protected CatBot createBot(String host, int port) throws UnknownHostException, IOException
+	{
+		return CatBot.create(this, host, port);
+	}
+
 	/**
 	 * <p>Runs the bot</p>
 	 * <p>Not that this function will block until {@link #shutdown()} is called;
@@ -188,14 +153,16 @@ public class BasicRelayCat implements Runnable, RelayCat
 	@Override
 	public synchronized void run()
 	{
+		if (bot != null) return; // Prevents re-running
 		try
 		{
 			log.log(Level.INFO, "Connecting to ''{0}''", host);
-			bot.connect(host);
+			bot = createBot(host, 6667);
+			bot.connect(name, "", name);
 			for (String channel : channels)
 			{
 				log.log(Level.INFO, "Joining ''{0}''", channel);
-				bot.joinChannel(channel);
+				bot.join(channel);
 			}
 			log.log(Level.INFO, "Operations Running!");
 			wait();
@@ -204,16 +171,12 @@ public class BasicRelayCat implements Runnable, RelayCat
 		{
 			log.log(Level.SEVERE, null, ex);
 		}
-		catch (IrcException ex)
-		{
-			log.log(Level.SEVERE, null, ex);
-		}
 		catch (InterruptedException ex)
 		{
 			shutdown();
 		}
-		bot.quitServer();
-		bot.disconnect();
+
+		bot.quit();
 		bot.dispose();
 	}
 
@@ -241,13 +204,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	{
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (message == null || message.length() == 0) return;
-		synchronized (transmissionLock)
-		{
-			for (String line : message.split("\n"))
-			{
-				bot.sendMessage(target, line);
-			}
-		}
+		bot.message(target, message);
 	}
 
 	@Override
@@ -255,44 +212,42 @@ public class BasicRelayCat implements Runnable, RelayCat
 	{
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (action == null || action.length() == 0) return;
-		synchronized (transmissionLock)
-		{
-			bot.sendAction(target, action);
-		}
+		bot.act(target, action);
 
 	}
 
 	@Override
 	public void join(String channel)
 	{
-		bot.joinChannel(channel);
+		bot.join(channel);
 	}
 
 	@Override
 	public void leave(String channel)
 	{
-		bot.partChannel(channel);
+		bot.part(channel);
 	}
 
 	@Override
 	public String getNick()
 	{
+		if (bot == null) return null;
 		return bot.getNick();
 	}
 
 	@Override
-	public User[] names(String channel)
+	public String[] names(String channel)
 	{
-		return bot.getUsers(channel);
+		return new String[]{};// bot.getUsers(channel); TODO: Fixme
 	}
 
 	@Override
 	public String[] channels()
 	{
-		return bot.getChannels();
+		return new String[]{}; // bot.getChannels(); TODO: Fixme
 	}
 
-		/**
+	/**
 	 * <p>Flag to denote that the bot is currently exiting</p>
 	 * @return the dispose
 	 */

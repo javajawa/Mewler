@@ -1,7 +1,5 @@
 package uk.co.harcourtprogramming.internetrelaycats;
-import org.jibble.pircbot.Colors;
-import org.jibble.pircbot.User;
-
+import uk.co.harcourtprogramming.mewler.servermesasges.User;
 public class Message implements RelayCat
 {
 	/**
@@ -53,7 +51,7 @@ public class Message implements RelayCat
 		this.inst = inst;
 		this.me = inst.getNick();
 		this.raw = message;
-		this.message = Colors.removeFormattingAndColors(message);
+		this.message = message; //Colors.removeFormattingAndColors(message);
 		this.nick = nick;
 		this.channel = channel;
 		this.action = action;
@@ -189,7 +187,7 @@ public class Message implements RelayCat
 	}
 
 	@Override
-	public User[] names(String channel)
+	public String[] names(String channel)
 	{
 		return inst.names(channel);
 	}

@@ -1,12 +1,15 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
 /**
  *
  *
  */
-public class TestingRelayCat extends BasicRelayCat
+public final class TestingRelayCat extends BasicRelayCat
 {
 	/**
 	 *
@@ -23,9 +26,9 @@ public class TestingRelayCat extends BasicRelayCat
 		 *
 		 * @param name
 		 */
-		private TCatBot(String name)
+		private TCatBot(TestingRelayCat cat) throws IOException
 		{
-			super(name);
+			super(cat, System.in, System.err, null);
 		}
 
 		@Override
@@ -83,11 +86,10 @@ public class TestingRelayCat extends BasicRelayCat
 	/**
 	 *
 	 */
-	@SuppressWarnings("LeakingThisInConstructor")
-	public TestingRelayCat()
+	public TestingRelayCat() throws UnknownHostException, IOException
 	{
-		super(new TCatBot(NAME), "", null);
-		bot.setInst(this);
+		super(NAME, "", null);
+		bot = new TCatBot(this);
 	}
 
 	@Override
@@ -125,7 +127,7 @@ public class TestingRelayCat extends BasicRelayCat
 	 */
 	public void inputMessage(String sender, String channel, String line)
 	{
-		bot.onMessage(channel, sender, null, null, line);
+		bot.onMessage(sender, null, channel, line);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class TestingRelayCat extends BasicRelayCat
 	 */
 	public void inputAction(String sender, String channel, String line)
 	{
-		bot.onAction(sender, null, null, (channel==null ? NAME : channel), line);
+		bot.onAction(sender, null, (channel==null ? NAME : channel), line);
 	}
 
 }

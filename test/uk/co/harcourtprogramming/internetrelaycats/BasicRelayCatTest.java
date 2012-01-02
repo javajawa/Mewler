@@ -1,5 +1,6 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.net.UnknownHostException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -49,11 +50,12 @@ public class BasicRelayCatTest
 	 * Test of getNick method, of class BasicRelayCat.
 	 */
 	@Test
-	public void testGetNick()
+	public void testGetNick() throws UnknownHostException
 	{
 		BasicRelayCat instance = new BasicRelayCat(NICK, "localhost", null);
 		// Until a connection is made, the Bot will return PircBot.
 		// This test only checks correct forwarding
-		assertEquals("PircBot", instance.getNick());
+		// TODO: Update notes
+		assertEquals(null, instance.getNick());
 	}
 }

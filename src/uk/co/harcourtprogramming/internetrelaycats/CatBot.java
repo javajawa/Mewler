@@ -1,35 +1,48 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jibble.pircbot.PircBot;
+import uk.co.harcourtprogramming.mewler.Mewler;
+import uk.co.harcourtprogramming.mewler.servermesasges.User;
 
 /**
  * <p>Internal wrapper for {@link PircBot} that allows us to hide much of
  * the 'functionality'</p>
  */
-public class CatBot extends PircBot
+public class CatBot extends Mewler
 {
 
-	private BasicRelayCat inst = null;
+	private final BasicRelayCat inst;
 
 	/**
 	 * Shared logger with {@link BasicRelayCat}
 	 */
 	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
 
-	/**
-	 * Create a new bot with a given name
-	 * @param name the name of the bot
-	 */
-	protected CatBot(String name)
+	public static CatBot create(BasicRelayCat inst, String host, int port) throws UnknownHostException, IOException
 	{
-		this.setName(name);
+		Socket ircSocket = new Socket(host, port);
+		return new CatBot(
+			inst,
+			ircSocket,
+			new ThreadGroup("Mewler")
+		);
 	}
 
-	final void setInst(BasicRelayCat inst)
+	protected CatBot(BasicRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup) throws IOException
 	{
+		super(i, o, threadGroup);
 		this.inst = inst;
+	}
+
+	protected CatBot(BasicRelayCat inst, Socket sock, ThreadGroup threadGroup) throws IOException
+	{
+		this(inst, sock.getInputStream(), sock.getOutputStream(), threadGroup);
 	}
 
 	/**
@@ -70,24 +83,15 @@ public class CatBot extends PircBot
 	}
 
 	@Override
-	public void onMessage(String channel, String sender, String login,
-		String hostname, String message)
+	protected void onMessage(String nick, User sender, String channel, String message)
 	{
-		onInput(false, sender, channel, message);
+		onInput(true, nick, channel, message);
 	}
 
 	@Override
-	public void onPrivateMessage(String sender, String login, String hostname,
-		String message)
+	protected void onAction(String nick, User sender, String channel, String action)
 	{
-		onInput(false, sender, null, message);
-	}
-
-	@Override
-	public void onAction(String sender, String login, String hostname,
-		String target, String action)
-	{
-		onInput(true, sender, target.equals(getNick()) ? null : target, action);
+		onInput(true, nick, channel, action);
 	}
 
 }

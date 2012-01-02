@@ -1,5 +1,7 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,7 +16,7 @@ public class TestingRelayCatTest
 	 *
 	 */
 	@SuppressWarnings("ResultOfObjectAllocationIgnored")
-	public void testCreation()
+	public void testCreation() throws UnknownHostException, IOException
 	{
 		new TestingRelayCat();
 	}
@@ -23,7 +25,7 @@ public class TestingRelayCatTest
 	 * Test of run method, of class TestingRelayCat.
 	 */
 	@Test(expected=UnsupportedOperationException.class)
-	public void testRun()
+	public void testRun() throws UnknownHostException, IOException
 	{
 		TestingRelayCat instance = new TestingRelayCat();
 		instance.run();
@@ -33,7 +35,7 @@ public class TestingRelayCatTest
 	 * Test of message method, of class TestingRelayCat.
 	 */
 	@Test
-	public void testMessage()
+	public void testMessage() throws UnknownHostException, IOException
 	{
 		final String target = "bob";
 		final String message = "hello";
@@ -55,7 +57,7 @@ public class TestingRelayCatTest
 	 * Test of act method, of class TestingRelayCat.
 	 */
 	@Test
-	public void testAct()
+	public void testAct() throws UnknownHostException, IOException
 	{
 		final String target = "bob";
 		final String message = "hello";
@@ -77,7 +79,7 @@ public class TestingRelayCatTest
 	 *
 	 */
 	@Test
-	public void testInputMessageWithChannel()
+	public void testInputMessageWithChannel() throws UnknownHostException, IOException
 	{
 		final TestingRelayCat instance = new TestingRelayCat();
 		instance.addService(new TestingRelayCat.RelayService());
@@ -109,7 +111,7 @@ public class TestingRelayCatTest
 	 *
 	 */
 	@Test
-	public void testInputMessageWithoutChannel()
+	public void testInputMessageWithoutChannel() throws UnknownHostException, IOException
 	{
 		final TestingRelayCat instance = new TestingRelayCat();
 		instance.addService(new TestingRelayCat.RelayService());
@@ -136,7 +138,7 @@ public class TestingRelayCatTest
 	 *
 	 */
 	@Test
-	public void testGetOutputWithoutInput()
+	public void testGetOutputWithoutInput() throws UnknownHostException, IOException
 	{
 		TestingRelayCat instance = new TestingRelayCat();
 		assertNull(instance.getOutput());

@@ -1,7 +1,5 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
-import org.jibble.pircbot.User;
-
 /**
  * @todo Class Documentation
  * @todo notes on how functions behave befoer connection is established
@@ -81,7 +79,7 @@ public interface RelayCat
      * @return An array of User objects. This array is empty if we are not
      *         in the channel.
      */
-	public User[] names(String channel);
+	public String[] names(String channel);
 	/**
 	 * <p>Returns an array of all channels that we are in.</p>
 	 * <p>Note that if you call this method immediately after joining a new

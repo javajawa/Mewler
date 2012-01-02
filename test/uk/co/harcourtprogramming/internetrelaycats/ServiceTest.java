@@ -1,5 +1,7 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -48,7 +50,7 @@ public class ServiceTest
 	 * Test of shutdown method, of class Service.
 	 */
 	@Test
-	public void testShutdown()
+	public void testShutdown() throws UnknownHostException, IOException
 	{
 		Service instance = new ServiceImpl();
 

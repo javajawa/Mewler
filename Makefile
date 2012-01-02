@@ -18,13 +18,13 @@ LIBS=$(wildcard lib/*.jar)
 CP=$(SRC):$(LIBS: =:)
 TCP=$(TEST):$(BUILD):$(JUNIT):$(LIBS: =:)
 
-FILES=$(wildcard $(SRC)/uk/co/harcourtprogramming/internetrelaycats/*.java)
+FILES=$(wildcard $(SRC)/uk/co/harcourtprogramming/internetrelaycats/*.java) $(wildcard $(SRC)/uk/co/harcourtprogramming/mewler/*.java)
 CLASS=$(patsubst $(SRC)/%.java,$(BUILD)/%.class,$(FILES))
 
-TFILES=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*.java)
+TFILES=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*.java) $(wildcard $(TEST)/uk/co/harcourtprogramming/mewler/*.java)
 TCLASS=$(patsubst $(TEST)/%.java,$(TBUILD)/%.class,$(TFILES))
 
-TESTABLE=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*Test.java)
+TESTABLE=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*Test.java) $(wildcard $(TEST)/uk/co/harcourtprogramming/mewler/*Test.java)
 TESTS=$(patsubst $(TEST).%.java,%,$(subst /,.,$(TESTABLE)))
 
 package: $(PACKAGEJAR)
@@ -42,7 +42,7 @@ $(TBUILD)/%.class : $(TEST)/%.java $(LIBS) compile $(TBUILD)
 $(PACKAGEJAR): $(PACKAGE) $(BUILD) $(CLASS) $(LIBS)
 	-rm -f $(PACKAGEJAR)
 	$(JAR) cfm $(PACKAGEJAR) Manifest.mf -C $(BUILD) .
-	cp $(LIBS) $(PACKAGE)
+	-cp $(LIBS) $(PACKAGE)
 
 $(BUILD):
 	-mkdir $@
