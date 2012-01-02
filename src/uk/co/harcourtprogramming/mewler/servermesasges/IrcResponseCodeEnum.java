@@ -3,6 +3,9 @@ package uk.co.harcourtprogramming.mewler.servermesasges;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Names, values, descriptions are from RFC 1459 (http://www.ietf.org/rfc/rfc1459.txt)
+ */
 public enum IrcResponseCodeEnum
 {
 	/* Error Replies */
