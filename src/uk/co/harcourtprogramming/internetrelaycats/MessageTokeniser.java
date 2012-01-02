@@ -43,7 +43,7 @@ public class MessageTokeniser implements CharSequence
 
 	public synchronized String nextToken(char delim)
 	{
-		if (offset >= originalLength) return null;
+		if (isEmpty()) return null;
 
 		int newOffset = original.indexOf(delim, offset);
 		String token;
@@ -94,5 +94,10 @@ public class MessageTokeniser implements CharSequence
 	public synchronized String toString()
 	{
 		return original.substring(offset);
+	}
+
+	public synchronized boolean isEmpty()
+	{
+		return (offset >= originalLength);
 	}
 }
