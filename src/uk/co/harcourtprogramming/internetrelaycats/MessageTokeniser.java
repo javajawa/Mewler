@@ -61,6 +61,27 @@ public class MessageTokeniser implements CharSequence
 
 		return token;
 	}
+	public synchronized String nextTokenWithDelim(String delim)
+	{
+		if (isEmpty()) return null;
+
+		int newOffset = original.indexOf(delim, offset);
+		String token;
+		if (newOffset == -1)
+		{
+			token = original.substring(offset, originalLength);
+			offset = originalLength;
+		}
+		else
+		{
+			newOffset += delim.length();
+			token = original.substring(offset, newOffset);
+			offset = newOffset;
+		}
+		if (consumeWhitespace) consumeWhitespace();
+
+		return token;
+	}
 
 	public synchronized void consume(String token)
 	{
