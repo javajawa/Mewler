@@ -37,7 +37,8 @@ public class MessageTokeniser implements CharSequence
 
 	public synchronized void consumeWhitespace()
 	{
-		while (offset < originalLength && (original.charAt(offset) == ' ' || original.charAt(offset) == '\t')) ++offset;
+		while (!isEmpty() &&(Character.isWhitespace(original.charAt(offset))))
+			++offset;
 	}
 
 	public synchronized String nextToken(char delim)
