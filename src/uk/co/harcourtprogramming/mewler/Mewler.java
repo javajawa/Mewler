@@ -244,4 +244,9 @@ public class Mewler
 			LOG.log(Level.SEVERE, "Exception when replying to PING", ex);
 		}
 	}
+
+	protected boolean isAlive()
+	{
+		return (inputThread.isAlive() || outputThread.isAlive());
+	}
 }
