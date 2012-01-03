@@ -92,6 +92,11 @@ public class Message implements RelayCat
 		return channel;
 	}
 
+	public String getReplyToAllTarget()
+	{
+		return (channel == null) ? nick : channel;
+	}
+
 	/**
 	 * @return the nick of the user that sent this message
 	 */
@@ -137,14 +142,7 @@ public class Message implements RelayCat
 	 */
 	public synchronized void replyToAll(String message)
 	{
-		if (channel == null)
-		{
-			message(nick, message);
-		}
-		else
-		{
-			message(channel, message);
-		}
+		message(getReplyToAllTarget(), message);
 	}
 
 	/**
