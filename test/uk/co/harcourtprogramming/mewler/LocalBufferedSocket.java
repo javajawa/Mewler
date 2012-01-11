@@ -102,14 +102,12 @@ public class LocalBufferedSocket
 		}
 
 		@Override
-		public synchronized void close() throws IOException
-		{
-			flush();
-		}
-
-		@Override
 		public void flush() throws IOException
 		{
+			// Don't ask me why, but the end of stream marker can apparently
+			// denote a break in the stream. I can't find any documentation to
+			// back this up, but...it works, dammit. Even with other classes
+			// in java.io (BufferedReader, I'm looking at you...)
 			q.add(-1);
 			super.flush();
 		}
