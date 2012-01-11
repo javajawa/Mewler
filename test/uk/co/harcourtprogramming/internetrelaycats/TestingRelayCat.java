@@ -1,7 +1,6 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
