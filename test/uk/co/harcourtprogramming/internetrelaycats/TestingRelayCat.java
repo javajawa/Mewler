@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
+import uk.co.harcourtprogramming.mewler.LocalBufferedSocket;
 
 public final class TestingRelayCat extends BasicRelayCat
 {
@@ -14,7 +15,7 @@ public final class TestingRelayCat extends BasicRelayCat
 
 		private TCatBot(TestingRelayCat cat) throws IOException
 		{
-			super(cat, System.in, System.err, null);
+			super(cat, new LocalBufferedSocket().in, new LocalBufferedSocket().out, null);
 		}
 
 		@Override
