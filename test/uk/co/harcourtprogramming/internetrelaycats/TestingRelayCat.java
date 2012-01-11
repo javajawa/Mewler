@@ -4,27 +4,14 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
-/**
- *
- *
- */
+
 public final class TestingRelayCat extends BasicRelayCat
 {
-	/**
-	 *
-	 */
 	private Queue<Message> messageQueue = new LinkedList<Message>();
 
-	/**
-	 *
-	 */
 	private static class TCatBot extends CatBot
 	{
 
-		/**
-		 *
-		 * @param name
-		 */
 		private TCatBot(TestingRelayCat cat) throws IOException
 		{
 			super(cat, System.in, System.err, null);
@@ -37,16 +24,10 @@ public final class TestingRelayCat extends BasicRelayCat
 		}
 	}
 
-	/**
-	 *
-	 */
 	@SuppressWarnings("PublicInnerClass")
 	public static class RelayService extends Service implements MessageService
 	{
 
-		/**
-		 *
-		 */
 		public RelayService()
 		{
 			super();
@@ -77,14 +58,8 @@ public final class TestingRelayCat extends BasicRelayCat
 
 	}
 
-	/**
-	 *
-	 */
 	public final static String NAME = "testBost";
 
-	/**
-	 *
-	 */
 	public TestingRelayCat() throws UnknownHostException, IOException
 	{
 		super(NAME, "", null);
@@ -109,32 +84,16 @@ public final class TestingRelayCat extends BasicRelayCat
 		messageQueue.offer(new Message(action, "name", target, true, this));
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	public Message getOutput()
 	{
 		return messageQueue.poll();
 	}
 
-	/**
-	 *
-	 * @param sender
-	 * @param channel
-	 * @param line
-	 */
 	public void inputMessage(String sender, String channel, String line)
 	{
 		bot.onMessage(sender, null, channel, line);
 	}
 
-	/**
-	 *
-	 * @param sender
-	 * @param channel
-	 * @param line
-	 */
 	public void inputAction(String sender, String channel, String line)
 	{
 		bot.onAction(sender, null, (channel==null ? NAME : channel), line);
