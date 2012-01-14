@@ -10,6 +10,128 @@ public class MessageTokeniserTest
 		// Nothing to see here. Move along, citizen!
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructionNull()
+	{
+		MessageTokeniser instance = new MessageTokeniser(null);
+	}
+
+	@Test
+	public void testStartsWithNull()
+	{
+		MessageTokeniser instance = new MessageTokeniser("hello");
+		assertFalse(instance.startsWith(null));
+	}
+
+	@Test
+	public void testStartsWithEmptyString()
+	{
+		MessageTokeniser instance = new MessageTokeniser("hello");
+		assertTrue(instance.startsWith(""));
+	}
+
+	@Test
+	public void testConsumeNull()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.consume(null);
+		assertEquals(data, instance.toString());
+	}
+
+	@Test
+	public void testConsumeEmptyString()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.consume("");
+		assertEquals(data, instance.toString());
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testAccessBeforeZero()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.charAt(-1);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testAccessBeforeShiftedZero()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.nextToken(' ');
+		instance.charAt(-1);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testAccessAfterEnd()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.charAt(4);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testAccessAfterShiftedEnd()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.nextToken(' ');
+		instance.charAt(4);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testSubsequenceBeforeZero()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.subSequence(-1, 2);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testSubsequenceBeforeShiftedZero()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.nextToken(' ');
+		instance.subSequence(-1, 2);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testSubsequenceAfterEnd()
+	{
+		final String data = "bob";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.subSequence(1, 4);
+	}
+
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void testSubsequenceAfterShiftedEnd()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		instance.nextToken(' ');
+		instance.subSequence(1, 4);
+	}
+
+	@Test
+	public void testTokenWithDelimNull()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		assertNull(instance.nextTokenWithDelim(null));
+	}
+
+	@Test
+	public void testTokenWithDelimEmptyString()
+	{
+		final String data = "bob ben";
+		MessageTokeniser instance = new MessageTokeniser(data);
+		assertEquals("", instance.nextTokenWithDelim(""));
+	}
+
 	@Test
 	public void testLengthBasic()
 	{
@@ -57,6 +179,42 @@ public class MessageTokeniserTest
 		assertEquals('a', instance.charAt(0));
 	}
 
+	@Test
+	public void testNoConsumeWhitespace()
+	{
+		final String testStr = "bob ben";
+		final String part1 = "bob";
+		final String expResult2 = " ben";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+
+		instance.consume(part1);
+		assertEquals(expResult2, instance.toString());
+	}
+
+	/**
+	 * Tests that get/set ConsumeWhitespace get/set the same variable, that it
+	 * defaults to false, and that when it is set to true, whitespace is consumed
+	 */
+	@Test
+	public void testGetSetConsumeWhitespace()
+	{
+		final String testStr = "bob ben";
+		final String part1 = "bob";
+		final String expResult1 = " ben";
+		final String expResult2 = "ben";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+
+		assertFalse("Test precondition not met: consumeWhitspace not fasle by default", instance.getConsumeWhitespace());
+
+		instance.consume(part1);
+		assertEquals("Test precondition not met.", expResult1, instance.toString());
+
+		instance.setConsumeWhitespace(true);
+		assertTrue(instance.getConsumeWhitespace());
+		assertEquals(expResult2, instance.toString());
+	}
 	/**
 	 * Test of nextToken method, of class MessageTokeniser.
 	 */
@@ -165,6 +323,7 @@ public class MessageTokeniserTest
 
 		assertEquals(token1, instance.nextToken(' '));
 		assertEquals(token2, instance.nextToken(' '));
+		assertNull(instance.nextToken(' '));
 	}
 
 

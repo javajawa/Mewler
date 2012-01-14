@@ -26,6 +26,7 @@ public class MessageTokeniser implements CharSequence
 	@Override
 	public synchronized char charAt(int index)
 	{
+		if (index < 0) throw new StringIndexOutOfBoundsException(index);
 		return original.charAt(index+offset);
 	}
 
@@ -63,7 +64,7 @@ public class MessageTokeniser implements CharSequence
 	}
 	public synchronized String nextTokenWithDelim(String delim)
 	{
-		if (isEmpty()) return null;
+		if (isEmpty() || delim == null) return null;
 
 		int newOffset = original.indexOf(delim, offset);
 		String token;
@@ -85,6 +86,7 @@ public class MessageTokeniser implements CharSequence
 
 	public synchronized void consume(String token)
 	{
+		if (token == null) return;
 		if (original.startsWith(token, offset))
 		{
 			offset += token.length();
@@ -104,10 +106,12 @@ public class MessageTokeniser implements CharSequence
 	public synchronized void setConsumeWhitespace(boolean consumeWhitespace)
 	{
 		this.consumeWhitespace = consumeWhitespace;
+		if (consumeWhitespace) consumeWhitespace();
 	}
 
 	public synchronized boolean startsWith(String token)
 	{
+		if (token == null) return false;
 		return original.startsWith(token, offset);
 	}
 
