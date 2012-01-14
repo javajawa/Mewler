@@ -1,5 +1,5 @@
 package uk.co.harcourtprogramming.internetrelaycats;
-import uk.co.harcourtprogramming.mewler.servermesasges.User;
+
 public class Message implements RelayCat
 {
 	/**
