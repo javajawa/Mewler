@@ -38,8 +38,8 @@ public class LocalBufferedSocket
 		 */
 		public synchronized String readLine() throws IOException
 		{
-			final int newLineChar = (int)('\n' & 0xFF);
-			final int carRetnChar = (int)('\r' & 0xFF);
+			final int newLineChar = ('\n' & 0xFF);
+			final int carRetnChar = ('\r' & 0xFF);
 
 			final byte[] buffer = new byte[8192];
 			int position = 0;
