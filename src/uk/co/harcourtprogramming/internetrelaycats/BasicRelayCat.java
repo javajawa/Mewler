@@ -59,6 +59,10 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 */
 	private final List<MessageService> msrvs = new ArrayList<MessageService>();
 	/**
+	 * <p>The list of currently activated {@link MessageService MessageServices}</p>
+	 */
+	private final List<FilterService> fsrvs = new ArrayList<FilterService>();
+	/**
 	 * <p>Flag to denote that the bot is currently exiting</p>
 	 */
 	private boolean dispose = false;
@@ -125,6 +129,12 @@ public class BasicRelayCat implements Runnable, RelayCat
 			if (s instanceof MessageService)
 			{
 				msrvs.add((MessageService)s);
+				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
+				    new Object[]{s.getClass().getSimpleName(), s.getId()});
+			}
+			if (s instanceof FilterService)
+			{
+				fsrvs.add((FilterService)s);
 				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
 				    new Object[]{s.getClass().getSimpleName(), s.getId()});
 			}
@@ -198,7 +208,18 @@ public class BasicRelayCat implements Runnable, RelayCat
 	{
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (message == null || message.length() == 0) return;
-		bot.message(target, message);
+
+		OutboundMessage o = new OutboundMessage(target, message, false);
+
+		for (FilterService f : fsrvs)
+		{
+			o = f.filter(o);
+			if (o == null) return;
+			if (o.getTarget() == null || o.getTarget().length() == 0) return;
+			if (o.getMessage() == null || o.getMessage().length() == 0) return;
+		}
+
+		bot.message(o.getTarget(), o.getMessage());
 	}
 
 	@Override
@@ -206,8 +227,17 @@ public class BasicRelayCat implements Runnable, RelayCat
 	{
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (action == null || action.length() == 0) return;
-		bot.act(target, action);
+		OutboundMessage o = new OutboundMessage(target, action, true);
 
+		for (FilterService f : fsrvs)
+		{
+			o = f.filter(o);
+			if (o == null) return;
+			if (o.getTarget() == null || o.getTarget().length() == 0) return;
+			if (o.getMessage() == null || o.getMessage().length() == 0) return;
+		}
+
+		bot.act(o.getTarget(), o.getMessage());
 	}
 
 	@Override
@@ -277,4 +307,8 @@ public class BasicRelayCat implements Runnable, RelayCat
 		return msrvs;
 	}
 
+	protected List<FilterService> getFsrvs()
+	{
+		return fsrvs;
+	}
 }
