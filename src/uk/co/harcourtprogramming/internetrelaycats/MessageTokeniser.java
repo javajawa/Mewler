@@ -33,6 +33,7 @@ public class MessageTokeniser implements CharSequence
 	@Override
 	public synchronized CharSequence subSequence(int start, int end)
 	{
+		if (start < 0 || end < 0) throw new StringIndexOutOfBoundsException();
 		return original.subSequence(start+offset, end+offset);
 	}
 
