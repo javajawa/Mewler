@@ -193,12 +193,6 @@ public class BasicRelayCat implements Runnable, RelayCat
 		notifyAll(); // run() waits to stop thread being killed; exits when notified
 	}
 
-	/**
-	 * <p>Object lock to synchronise on when sending messages, such that
-	 * multi-line messages can be sent as a contiguous block</p>
-	 */
-	private final Object transmissionLock = new Object();
-
 	@Override
 	public void message(String target, String message)
 	{
