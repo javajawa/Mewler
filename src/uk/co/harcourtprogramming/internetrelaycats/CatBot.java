@@ -34,7 +34,7 @@ public class CatBot extends Mewler
 		);
 	}
 
-	protected CatBot(BasicRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup) throws IOException
+	protected CatBot(BasicRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup)
 	{
 		super(i, o, threadGroup);
 		this.inst = inst;

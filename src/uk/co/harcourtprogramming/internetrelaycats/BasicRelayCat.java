@@ -89,7 +89,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * is established
 	 * @throws IllegalArgumentException if the name or host are not supplied
 	 */
-	public BasicRelayCat(final String name, final String host, final List<String> channels) throws UnknownHostException
+	public BasicRelayCat(final String name, final String host, final List<String> channels)
 	{
 		super();
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");

@@ -13,7 +13,7 @@ public final class TestingRelayCat extends BasicRelayCat
 	private static class TCatBot extends CatBot
 	{
 
-		private TCatBot(TestingRelayCat cat) throws IOException
+		private TCatBot(TestingRelayCat cat)
 		{
 			super(cat, new LocalBufferedSocket().in, new LocalBufferedSocket().out, null);
 		}
@@ -61,7 +61,7 @@ public final class TestingRelayCat extends BasicRelayCat
 
 	public final static String NAME = "testBost";
 
-	public TestingRelayCat() throws UnknownHostException, IOException
+	public TestingRelayCat()
 	{
 		super(NAME, "", null);
 		bot = new TCatBot(this);
