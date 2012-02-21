@@ -107,7 +107,6 @@ public class MewlerImpl extends Mewler
 	@Override
 	protected void onDisconnect()
 	{
-		log.log(Level.WARNING, "Disconnected from server - shutting down.");
-		inst.shutdown();
+		inst.onDisconnect();
 	}
 }

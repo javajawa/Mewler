@@ -171,22 +171,18 @@ public class InternetRelayCat implements Runnable, RelayCat
 	public synchronized void run()
 	{
 		if (bot != null) return; // Prevents re-running
+
+		this.bot = connect();
+		if (bot == null)
+		{
+			shutdown();
+			return;
+		}
+		log.log(Level.INFO, "Operations Running!");
+
 		try
 		{
-			log.log(Level.INFO, "Connecting to ''{0}''", host);
-			bot = createBot(host, 6667, false);
-			bot.connect(name, "", name);
-			for (String channel : channels)
-			{
-				log.log(Level.INFO, "Joining ''{0}''", channel);
-				bot.join(channel);
-			}
-			log.log(Level.INFO, "Operations Running!");
 			wait();
-		}
-		catch (IOException ex)
-		{
-			log.log(Level.SEVERE, null, ex);
 		}
 		catch (InterruptedException ex)
 		{
@@ -323,5 +319,57 @@ public class InternetRelayCat implements Runnable, RelayCat
 	protected List<FilterService> getFsrvs()
 	{
 		return fsrvs;
+	}
+
+	void onDisconnect()
+	{
+		log.log(Level.WARNING, "Disconnected from server.");
+		// TODO: Add controls for reconnection
+		bot = null;
+
+		if (isDispose()) return;
+		new Thread("Reconnect Thread") {
+
+			@Override
+			public void run()
+			{
+				log.log(Level.WARNING, "Waiting 30s for reconnect.");
+				try
+				{
+					Thread.sleep(30000);
+				}
+				catch (InterruptedException ex)
+				{
+					throw new Error(ex);
+				}
+				bot = connect();
+				// See if we actually achieved a connection
+				if (bot == null)
+					onDisconnect();
+			}
+		}.start();
+	}
+
+	protected MewlerImpl connect()
+	{
+		MewlerImpl newbot;
+		try
+		{
+			log.log(Level.INFO, "Connecting to ''{0}''", host);
+			newbot = createBot(host, 6667, false);
+			newbot.connect(name, "", name);
+			for (String channel : channels)
+			{
+				log.log(Level.INFO, "Joining ''{0}''", channel);
+				newbot.join(channel);
+			}
+		}
+		catch (IOException ex)
+		{
+			log.log(Level.SEVERE, null, ex);
+			return null;
+		}
+
+		return newbot;
 	}
 }
