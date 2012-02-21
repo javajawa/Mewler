@@ -352,6 +352,8 @@ public class InternetRelayCat implements Runnable, RelayCat
 		}.start();
 	}
 
+	private final Object connlock = new Object();
+
 	protected MewlerImpl connect()
 	{
 		MewlerImpl newbot;
@@ -372,6 +374,21 @@ public class InternetRelayCat implements Runnable, RelayCat
 			return null;
 		}
 
+		synchronized (connlock)
+		{
+			connlock.notifyAll();
+		}
+
 		return newbot;
+	}
+
+	// ~TODO: Consider this for being added to RelayCat
+	public void waitForConnection() throws InterruptedException
+	{
+		synchronized (connlock)
+		{
+			if (isConnected()) return;
+			connlock.wait();
+		}
 	}
 }
