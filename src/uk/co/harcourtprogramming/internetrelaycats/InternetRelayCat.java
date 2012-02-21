@@ -33,7 +33,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 				Calendar time = Calendar.getInstance();
 				time.setTimeInMillis(l.getMillis());
 
-				return String.format("[%2$tR %1$s] %3$s\n",
+				return String.format("[%2$tD %2$tR %1$s] %3$s\n",
 					l.getLevel().getLocalizedName(), time, formatMessage(l));
 			}
 		});
