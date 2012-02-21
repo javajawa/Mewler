@@ -131,6 +131,13 @@ public class InternetRelayCat implements Runnable, RelayCat
 		synchronized(srvs)
 		{
 			if (dispose) return;
+			if (s instanceof ExternalService)
+			{
+				final ExternalService es = (ExternalService)s;
+				if (es.getInstance() != this)
+					throw new IllegalArgumentException("Supplied External Service does not belong to this RelayCat instance");
+				es.getThread().start();
+			}
 			log.log(Level.INFO, "Service Loaded: {0}@{1}",
 			    new Object[]{s.getClass().getSimpleName(), s.getId()});
 			if (s instanceof MessageService)
@@ -144,13 +151,6 @@ public class InternetRelayCat implements Runnable, RelayCat
 				fsrvs.add((FilterService)s);
 				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
 				    new Object[]{s.getClass().getSimpleName(), s.getId()});
-			}
-			if (s instanceof ExternalService)
-			{
-				final ExternalService es = (ExternalService)s;
-				if (es.getInstance() != this)
-					throw new IllegalArgumentException("Supplied External Service does not belong to this RelayCat instance");
-				es.getThread().start();
 			}
 			srvs.add(s);
 		}
