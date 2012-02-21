@@ -38,6 +38,42 @@ public class Mewler
 				return String.format("[%2$tR %1$s] %3$s\n",
 					l.getLevel().getLocalizedName(), time, formatMessage(l));
 			}
+
+			@Override
+			public synchronized String formatMessage(LogRecord record)
+			{
+				if (record.getMessage() == null)
+				{
+					if (record.getThrown() == null)
+					{
+						return String.format("null log from <%3s>%1s::%2s", record.getSourceClassName(), record.getSourceMethodName(), Thread.currentThread().getName());
+					}
+					else
+					{
+						Throwable thrown = record.getThrown();
+						return String.format("%s <%s>%s::%s\n\t%s",
+							thrown.getClass().getName(),
+							Thread.currentThread().getName(),
+							record.getSourceClassName(),
+							record.getSourceMethodName(),
+							thrown.getLocalizedMessage()
+						);
+					}
+				}
+				if (record.getThrown() == null)
+				{
+					return String.format("%1s", record.getMessage());
+				}
+				Throwable thrown = record.getThrown();
+				return String.format("%s <%s>%s::%s\n\t%s\n\t%s",
+					thrown.getClass().getName(),
+					Thread.currentThread().getName(),
+					record.getSourceClassName(),
+					record.getSourceMethodName(),
+					record.getMessage(),
+					thrown.getLocalizedMessage()
+				);
+			}
 		});
 		LOG.addHandler(h);
 		LOG.setUseParentHandlers(false);
