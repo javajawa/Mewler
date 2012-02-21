@@ -24,14 +24,14 @@ public class BasicRelayCatTest
 	private final static String HOST = "irc.esper.net";
 
 	/**
-	 * Test of shutdown method, of class BasicRelayCat.
+	 * Test of shutdown method, of class InternetRelayCat.
 	 *
 	 * @throws Throwable
 	 */
 	@Test(expected=ShutdownWasCalledException.class)
 	public void testShutdown() throws Throwable
 	{
-		BasicRelayCat instance = new BasicRelayCat(NICK, "localhost", null);
+		InternetRelayCat instance = new InternetRelayCat(NICK, "localhost", null);
 		instance.addService(new ShutdownTestSerivce());
 
 		new Thread(instance).start();
@@ -47,12 +47,12 @@ public class BasicRelayCatTest
 	}
 
 	/**
-	 * Test of getNick method, of class BasicRelayCat.
+	 * Test of getNick method, of class InternetRelayCat.
 	 */
 	@Test
 	public void testGetNick() throws UnknownHostException
 	{
-		BasicRelayCat instance = new BasicRelayCat(NICK, "localhost", null);
+		InternetRelayCat instance = new InternetRelayCat(NICK, "localhost", null);
 		// Until a connection is made, the Bot will return PircBot.
 		// This test only checks correct forwarding
 		// TODO: Update notes

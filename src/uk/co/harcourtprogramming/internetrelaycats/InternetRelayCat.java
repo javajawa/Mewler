@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * <p>The main class for InternetRelayCats</p>
  */
-public class BasicRelayCat implements Runnable, RelayCat
+public class InternetRelayCat implements Runnable, RelayCat
 {
 
 	/**
@@ -45,6 +45,9 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * <p>The host to which we shall connect to when the the thread is run</p>
 	 */
 	private final String host;
+	/**
+	 * <p>The name that this bot should attempt to connect with</p>
+	 */
 	private final String name;
 	/**
 	 * <p>A list of channels to connect to when the thread is run</p>
@@ -73,12 +76,12 @@ public class BasicRelayCat implements Runnable, RelayCat
 	protected CatBot bot;
 
 	/**
-	 * <p>Creates a BasicRelayCat instance</p>
+	 * <p>Creates a InternetRelayCat instance</p>
 	 * <p>The instance is initialised, and services can be added, but does not
 	 * connect to the server specified in host until it is run, either by
 	 * calling the {@link #run() run} method directly, or executing it in a new
 	 * {@link Thread} with:
-	 * <pre>    new Thread(BasicRelayCat).start();</pre>
+	 * <pre>    new Thread(InternetRelayCat).start();</pre>
 	 * </p>
 	 * <p>A list of channels can be supplied to the constructor so that they
 	 * are joined when the server connection is made. Other channels can be
@@ -89,7 +92,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * is established
 	 * @throws IllegalArgumentException if the name or host are not supplied
 	 */
-	public BasicRelayCat(final String name, final String host, final List<String> channels)
+	public InternetRelayCat(final String name, final String host, final List<String> channels)
 	{
 		super();
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
@@ -109,7 +112,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	}
 
 	/**
-	 * <p>Adds a service to the BasicRelayCat</p>
+	 * <p>Adds a service to the InternetRelayCat</p>
 	 * <p>{@link MessageService Message Services} will be forwarded inputs</p>
 	 * <p>{@link ExternalService External Services} will be correctly
 	 * initialised, and their threads started</p>
@@ -158,7 +161,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 	 * <p>Runs the bot</p>
 	 * <p>Not that this function will block until {@link #shutdown()} is called;
 	 * thus is it recommend to run the bot in a new thread:
-	 * <pre>    new Thread(BasicRelayCat).start();</pre></p>
+	 * <pre>    new Thread(InternetRelayCat).start();</pre></p>
 	 */
 	@Override
 	public synchronized void run()

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import uk.co.harcourtprogramming.mewler.LocalBufferedSocket;
 
-public final class TestingRelayCat extends BasicRelayCat
+public final class TestingRelayCat extends InternetRelayCat
 {
 	private Queue<Message> messageQueue = new LinkedList<Message>();
 

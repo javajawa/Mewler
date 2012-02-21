@@ -16,7 +16,7 @@ public class Message implements RelayCat
 	 */
 	private final String nick;
 	/**
-	 * <p>The nick of the {@link BasicRelayCat}</p>
+	 * <p>The nick of the {@link InternetRelayCat}</p>
 	 */
 	private final String me;
 	/**
@@ -35,7 +35,7 @@ public class Message implements RelayCat
 	/**
 	 * The instance that created this message class
 	 */
-	private final BasicRelayCat inst;
+	private final InternetRelayCat inst;
 
 	/**
 	 * Creates a new message object
@@ -46,7 +46,7 @@ public class Message implements RelayCat
 	 * @param inst
 	 */
 	protected Message(String message, String nick, String channel,
-		boolean action, BasicRelayCat inst)
+		boolean action, InternetRelayCat inst)
 	{
 		this.inst = inst;
 		this.me = inst.getNick();

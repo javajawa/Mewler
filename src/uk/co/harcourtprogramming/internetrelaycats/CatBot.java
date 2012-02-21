@@ -18,14 +18,14 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
 public class CatBot extends Mewler
 {
 
-	private final BasicRelayCat inst;
+	private final InternetRelayCat inst;
 
 	/**
-	 * Shared logger with {@link BasicRelayCat}
+	 * Shared logger with {@link InternetRelayCat}
 	 */
 	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
 
-	public static CatBot create(BasicRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
+	public static CatBot create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
 		Socket ircSocket = ssl ? SSLSocketFactory.getDefault().createSocket(host,port) : new Socket(host, port);
 		return new CatBot(
@@ -35,13 +35,13 @@ public class CatBot extends Mewler
 		);
 	}
 
-	protected CatBot(BasicRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup)
+	protected CatBot(InternetRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup)
 	{
 		super(i, o, threadGroup);
 		this.inst = inst;
 	}
 
-	protected CatBot(BasicRelayCat inst, Socket sock, ThreadGroup threadGroup) throws IOException
+	protected CatBot(InternetRelayCat inst, Socket sock, ThreadGroup threadGroup) throws IOException
 	{
 		this(inst, sock.getInputStream(), sock.getOutputStream(), threadGroup);
 	}

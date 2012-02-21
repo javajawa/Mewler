@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * <p>An external service is a {@link BasicRelayCat} {@link Service} that runs in a
+ * <p>An external service is a {@link InternetRelayCat} {@link Service} that runs in a
  * separate thread from the IRC interface.</p>
  * <p>Currently, it is unable to receive messages (although, they can be
  * forwarded with a {@link MessageService}</p>
@@ -34,7 +34,7 @@ public abstract class ExternalService extends Service implements Runnable
 	 */
 	private final Thread t;
 	/**
-	 * <p>Reference to the {@link BasicRelayCat} instance that is using this
+	 * <p>Reference to the {@link InternetRelayCat} instance that is using this
 	 * service.</p>
 	 * <p>This only will be null until the instance starts the thread; this must
 	 * always be tested for.</p>
@@ -44,16 +44,16 @@ public abstract class ExternalService extends Service implements Runnable
 	/**
 	 * <p>Create the external service</p>
 	 * <p>The {@link #t thread} is created at this time, and will be {@link
-	 * Thread#start() started} when the {@link BasicRelayCat} {@link #inst
+	 * Thread#start() started} when the {@link InternetRelayCat} {@link #inst
 	 * instance} is initialised.</p>
-	 * <p>External services can only be attached to one {@link BasicRelayCat}
+	 * <p>External services can only be attached to one {@link InternetRelayCat}
 	 * instance; however, they still need to be added after creation with
-	 * {@link BasicRelayCat#addService(uk.co.harcourtprogramming.internetrelaycats.Service)
-	 * BasicRelayCat.addService}. Adding the service will cause the service's
+	 * {@link InternetRelayCat#addService(uk.co.harcourtprogramming.internetrelaycats.Service)
+	 * InternetRelayCat.addService}. Adding the service will cause the service's
 	 * thread to be run.</p>
 	 * @param inst the instance that this external service will work with
 	 */
-	public ExternalService(BasicRelayCat inst)
+	public ExternalService(InternetRelayCat inst)
 	{
 		super();
 		t = new Thread(THREAD_GROUP, this, super.toString());
