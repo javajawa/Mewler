@@ -89,4 +89,5 @@ public interface RelayCat
 	 * @return list of channels we are connected to
 	 */
 	public String[] channels();
+	public boolean isConnected();
 }

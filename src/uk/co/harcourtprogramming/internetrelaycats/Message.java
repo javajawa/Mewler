@@ -196,6 +196,12 @@ public class Message implements RelayCat
 		return inst.channels();
 	}
 
+	@Override
+	public boolean isConnected()
+	{
+		return inst.isConnected();
+	}
+
 	/**
 	 * @return whether this Message has been disposed
 	 */

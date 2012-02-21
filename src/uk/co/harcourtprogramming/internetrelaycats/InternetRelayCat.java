@@ -278,6 +278,12 @@ public class InternetRelayCat implements Runnable, RelayCat
 		return new String[]{}; // bot.getChannels(); TODO: Fixme
 	}
 
+	@Override
+	public boolean isConnected()
+	{
+		return (bot != null);
+	}
+
 	/**
 	 * <p>Flag to denote that the bot is currently exiting</p>
 	 * @return the dispose
