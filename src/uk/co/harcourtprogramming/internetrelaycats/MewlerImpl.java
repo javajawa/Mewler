@@ -95,4 +95,10 @@ public class MewlerImpl extends Mewler
 		onInput(true, nick, channel, action);
 	}
 
+	@Override
+	protected void onDisconnect()
+	{
+		log.log(Level.WARNING, "Disconnected from server - shutting down.");
+		inst.shutdown();
+	}
 }
