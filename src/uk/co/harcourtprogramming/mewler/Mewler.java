@@ -62,7 +62,7 @@ public class Mewler
 				}
 				if (record.getThrown() == null)
 				{
-					return String.format("%1s", record.getMessage());
+					return super.formatMessage(record);
 				}
 				Throwable thrown = record.getThrown();
 				return String.format("%s <%s>%s::%s\n\t%s\n\t%s",
@@ -70,7 +70,7 @@ public class Mewler
 					Thread.currentThread().getName(),
 					record.getSourceClassName(),
 					record.getSourceMethodName(),
-					record.getMessage(),
+					super.formatMessage(record),
 					thrown.getLocalizedMessage()
 				);
 			}
