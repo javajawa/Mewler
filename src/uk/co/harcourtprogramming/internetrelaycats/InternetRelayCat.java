@@ -340,7 +340,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * <p>The list of currently activated {@link Service Services}</p>
 	 * @return the srvs
 	 */
-	protected List<Service> getSrvs()
+	protected Iterable<Service> getSrvs()
 	{
 		return srvs;
 	}
@@ -349,12 +349,12 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * <p>The list of currently activated {@link MessageService MessageServices}</p>
 	 * @return the msrvs
 	 */
-	protected List<MessageService> getMsrvs()
+	protected Iterable<MessageService> getMsrvs()
 	{
 		return msrvs;
 	}
 
-	protected List<FilterService> getFsrvs()
+	protected Iterable<FilterService> getFsrvs()
 	{
 		return fsrvs;
 	}
