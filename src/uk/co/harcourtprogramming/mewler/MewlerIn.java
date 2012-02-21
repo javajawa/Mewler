@@ -80,6 +80,7 @@ class MewlerIn extends Thread
 			finally
 			{
 				died = true;
+				outer.onDisconnect();
 				outer.dispose();
 			}
 		}

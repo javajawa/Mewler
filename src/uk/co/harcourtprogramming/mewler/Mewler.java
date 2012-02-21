@@ -231,6 +231,11 @@ public class Mewler
 		// Nothing to see here. Move along, citizen!
 	}
 
+	protected void onDisconnect()
+	{
+		// Nothing to see here. Move along, citizen!
+	}
+
 	protected void onPing(IrcPingMessage ping)
 	{
 		try
