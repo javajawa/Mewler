@@ -10,7 +10,8 @@ Mewler:
 
 IRCats:
 	- Rejoin support
-	-
+	- SSL support
+	- Any port support
 
 Bridges:
 	- Add support for message priorities (the outbound queue has this, but is not used)
