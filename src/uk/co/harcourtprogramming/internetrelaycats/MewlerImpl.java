@@ -27,7 +27,16 @@ public class MewlerImpl extends Mewler
 
 	public static MewlerImpl create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
-		Socket ircSocket = ssl ? SSLSocketFactory.getDefault().createSocket(host,port) : new Socket(host, port);
+		Socket ircSocket;
+		if (ssl)
+		{
+			ircSocket = SSLSocketFactory.getDefault().createSocket(host,port);
+		}
+		else
+		{
+			ircSocket = new Socket(host, port);
+		}
+
 		return new MewlerImpl(
 			inst,
 			ircSocket,
