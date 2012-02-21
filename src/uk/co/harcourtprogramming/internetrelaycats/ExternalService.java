@@ -22,7 +22,7 @@ public abstract class ExternalService extends Service implements Runnable
 			@Override
 			public void uncaughtException(Thread t, Throwable e)
 			{
-				Logger.getLogger("InternetRelayCats.Service").log(
+				InternetRelayCat.getLogger().log(
 					Level.SEVERE,
 					"Uncaught Exception in " + t.getName(),
 					e

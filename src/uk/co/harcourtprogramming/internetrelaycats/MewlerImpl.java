@@ -23,7 +23,7 @@ public class MewlerImpl extends Mewler
 	/**
 	 * Shared logger with {@link InternetRelayCat}
 	 */
-	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
+	private final static Logger log = InternetRelayCat.getLogger();
 
 	public static MewlerImpl create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{

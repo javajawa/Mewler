@@ -40,6 +40,10 @@ public class InternetRelayCat implements Runnable, RelayCat
 		log.addHandler(h);
 		log.setUseParentHandlers(false);
 	}
+	static Logger getLogger()
+	{
+		return log;
+	}
 
 	/**
 	 * <p>The host to which we shall connect to when the the thread is run</p>
