@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLSocketFactory;
 import uk.co.harcourtprogramming.mewler.Mewler;
 import uk.co.harcourtprogramming.mewler.servermesasges.User;
 
@@ -24,9 +25,9 @@ public class CatBot extends Mewler
 	 */
 	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
 
-	public static CatBot create(BasicRelayCat inst, String host, int port) throws UnknownHostException, IOException
+	public static CatBot create(BasicRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
-		Socket ircSocket = new Socket(host, port);
+		Socket ircSocket = ssl ? SSLSocketFactory.getDefault().createSocket(host,port) : new Socket(host, port);
 		return new CatBot(
 			inst,
 			ircSocket,

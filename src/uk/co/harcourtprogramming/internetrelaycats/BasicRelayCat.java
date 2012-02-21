@@ -149,9 +149,9 @@ public class BasicRelayCat implements Runnable, RelayCat
 		}
 	}
 
-	protected CatBot createBot(String host, int port) throws UnknownHostException, IOException
+	protected CatBot createBot(String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
-		return CatBot.create(this, host, port);
+		return CatBot.create(this, host, port, ssl);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class BasicRelayCat implements Runnable, RelayCat
 		try
 		{
 			log.log(Level.INFO, "Connecting to ''{0}''", host);
-			bot = createBot(host, 6667);
+			bot = createBot(host, 6667, false);
 			bot.connect(name, "", name);
 			for (String channel : channels)
 			{
