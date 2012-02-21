@@ -15,6 +15,35 @@ class MewlerIn extends Thread
 
 	protected final Mewler outer;
 	protected final BufferedReader inputStream;
+	protected final TimeoutThread timeout;
+
+	private final class TimeoutThread extends Thread
+	{
+		private final long timeout;
+		private TimeoutThread(ThreadGroup tg, long timeout)
+		{
+			super(tg, "InternetRelayCats.Mewler-Input-Timeout-Thread");
+			this.setDaemon(true);
+			this.timeout = timeout;
+		}
+
+		@Override
+		public void run()
+		{
+			while (true)
+			{
+				try
+				{
+					Thread.sleep(timeout);
+					MewlerIn.this.interrupt();
+				}
+				catch (InterruptedException ex)
+				{
+					// Timer reset.
+				}
+			}
+		}
+	}
 
 	protected MewlerIn(BufferedReader inputStream, Mewler outer)
 	{
@@ -26,6 +55,7 @@ class MewlerIn extends Thread
 		super(tg, "InternetRelayCats.Mewler-Input-Thread");
 		this.outer = outer;
 		this.inputStream = inputStream;
+		this.timeout = new TimeoutThread(tg, 120000);
 	}
 
 	protected final boolean isDead()
@@ -47,6 +77,7 @@ class MewlerIn extends Thread
 
 				if (mess instanceof IrcPingMessage)
 				{
+					timeout.interrupt();
 					outer.onPing((IrcPingMessage)mess);
 				}
 				else if (mess instanceof IrcPrivmsg)
