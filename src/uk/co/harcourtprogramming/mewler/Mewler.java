@@ -148,7 +148,7 @@ public class Mewler
 			if (line == null)
 			{
 				dispose();
-				throw new Error("Error whilst trying to connect: null message");
+				throw new IOException("Error whilst trying to connect: null message");
 			}
 
 			AbstractIrcMessage mess = AbstractIrcMessage.parse(line, currNick);
@@ -165,7 +165,7 @@ public class Mewler
 				if (message.getMessageType().equals("ERROR"))
 				{
 					dispose();
-					throw new Error("Error whilst trying to connect: " + message.getPayload());
+					throw new IOException("Error whilst trying to connect: " + message.getPayload());
 				}
 			}
 			else if (mess instanceof IrcResponseCode)
