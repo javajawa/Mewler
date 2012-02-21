@@ -73,7 +73,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	/**
 	 * <p>instance of the underlying bot interface</p>
 	 */
-	protected CatBot bot;
+	protected MewlerImpl bot;
 
 	/**
 	 * <p>Creates a InternetRelayCat instance</p>
@@ -152,9 +152,9 @@ public class InternetRelayCat implements Runnable, RelayCat
 		}
 	}
 
-	protected CatBot createBot(String host, int port, boolean ssl) throws UnknownHostException, IOException
+	protected MewlerImpl createBot(String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
-		return CatBot.create(this, host, port, ssl);
+		return MewlerImpl.create(this, host, port, ssl);
 	}
 
 	/**

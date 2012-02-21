@@ -10,7 +10,7 @@ public final class TestingRelayCat extends InternetRelayCat
 {
 	private Queue<Message> messageQueue = new LinkedList<Message>();
 
-	private static class TCatBot extends CatBot
+	private static class TCatBot extends MewlerImpl
 	{
 
 		private TCatBot(TestingRelayCat cat)

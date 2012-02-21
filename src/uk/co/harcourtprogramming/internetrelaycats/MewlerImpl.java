@@ -15,7 +15,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
  * <p>Internal wrapper for {@link PircBot} that allows us to hide much of
  * the 'functionality'</p>
  */
-public class CatBot extends Mewler
+public class MewlerImpl extends Mewler
 {
 
 	private final InternetRelayCat inst;
@@ -25,23 +25,23 @@ public class CatBot extends Mewler
 	 */
 	private final static Logger log = Logger.getLogger("IntertnetRelayCat");
 
-	public static CatBot create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
+	public static MewlerImpl create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
 		Socket ircSocket = ssl ? SSLSocketFactory.getDefault().createSocket(host,port) : new Socket(host, port);
-		return new CatBot(
+		return new MewlerImpl(
 			inst,
 			ircSocket,
 			new ThreadGroup("Mewler")
 		);
 	}
 
-	protected CatBot(InternetRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup)
+	protected MewlerImpl(InternetRelayCat inst, InputStream i, OutputStream o, ThreadGroup threadGroup)
 	{
 		super(i, o, threadGroup);
 		this.inst = inst;
 	}
 
-	protected CatBot(InternetRelayCat inst, Socket sock, ThreadGroup threadGroup) throws IOException
+	protected MewlerImpl(InternetRelayCat inst, Socket sock, ThreadGroup threadGroup) throws IOException
 	{
 		this(inst, sock.getInputStream(), sock.getOutputStream(), threadGroup);
 	}
