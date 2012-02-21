@@ -1,0 +1,17 @@
+Mewler:
+	- Add flag to determine if automatically rotate nicknames
+	- joinChannelBlocking method which waits for channel join / failure notification
+	- Add support for code ERR_NOMOTD(422) in joining algorithm
+	- Channel object to cache channel state
+		- Topic
+		- Userlist
+	- Add internal handlers to keep channel info up to date
+	- Switch to a listener registering system, rather than overriding
+
+IRCats:
+	- Rejoin support
+	-
+
+Bridges:
+	- Add support for message priorities (the outbound queue has this, but is not used)
+	- Properly sort out notification of disconnect
