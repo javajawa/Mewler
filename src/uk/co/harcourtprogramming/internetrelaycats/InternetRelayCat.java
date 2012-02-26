@@ -89,6 +89,8 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * <p>The name that this bot should attempt to connect with</p>
 	 */
 	private final String name;
+	private final int port;
+	private final boolean ssl;
 	/**
 	 * <p>A list of channels to connect to when the thread is run</p>
 	 */
@@ -132,7 +134,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * is established
 	 * @throws IllegalArgumentException if the name or host are not supplied
 	 */
-	public InternetRelayCat(final String name, final String host, final List<String> channels)
+	public InternetRelayCat(final String name, final String host, final List<String> channels, int port, boolean ssl)
 	{
 		super();
 		if (host==null) throw new IllegalArgumentException("Host must be supplied");
@@ -140,6 +142,8 @@ public class InternetRelayCat implements Runnable, RelayCat
 
 		this.host = host;
 		this.name = name;
+		this.port = port;
+		this.ssl = ssl;
 
 		if (channels == null)
 		{
@@ -149,6 +153,28 @@ public class InternetRelayCat implements Runnable, RelayCat
 		{
 			this.channels = new ArrayList<String>(channels);
 		}
+	}
+
+	/**
+	 * <p>Creates a InternetRelayCat instance</p>
+	 * <p>The instance is initialised, and services can be added, but does not
+	 * connect to the server specified in host until it is run, either by
+	 * calling the {@link #run() run} method directly, or executing it in a new
+	 * {@link Thread} with:
+	 * <pre>    new Thread(InternetRelayCat).start();</pre>
+	 * </p>
+	 * <p>A list of channels can be supplied to the constructor so that they
+	 * are joined when the server connection is made. Other channels can be
+	 * joined later with {@link RelayCat#join(java.lang.String)}</p>
+	 * @param name the name for the bot
+	 * @param host the host to connect to
+	 * @param channels a list of channels to connect to as soon as a connection
+	 * is established
+	 * @throws IllegalArgumentException if the name or host are not supplied
+	 */
+	public InternetRelayCat(final String name, final String host, final List<String> channels)
+	{
+		this(name, host, channels, 6667, false);
 	}
 
 	/**
@@ -396,7 +422,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 		try
 		{
 			log.log(Level.INFO, "Connecting to ''{0}''", host);
-			newbot = createBot(host, 6667, false);
+			newbot = createBot(host, port, ssl);
 			newbot.connect(name, "", name);
 			for (String channel : channels)
 			{
