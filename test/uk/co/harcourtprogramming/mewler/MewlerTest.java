@@ -13,7 +13,7 @@ public class MewlerTest
 	}
 
 	/**
-	 * Test of connect method, of class Mewler.
+	 * Test of connect method, of class IrcConnection.
 	 */
 	@Test(timeout=8000)
 	public void testConnect() throws Exception
@@ -28,7 +28,7 @@ public class MewlerTest
 		final LocalBufferedSocket.LineReader fromClient = outputSocket.in;
 		final BufferedWriter toClient = new BufferedWriter(new OutputStreamWriter(inputSocket.out));
 
-		final Mewler instance = new Mewler(inputSocket.in, outputSocket.out, null);
+		final IrcConnection instance = new IrcConnection(inputSocket.in, outputSocket.out, null);
 		final Thread main = Thread.currentThread();
 
 		final Thread testHolder = new Thread() {

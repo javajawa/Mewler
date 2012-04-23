@@ -10,7 +10,7 @@ import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
  *
  * @author Benedict
  */
-public class MewlerOut extends Thread
+public class IrcOutgoingThread extends Thread
 {
 	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
 
@@ -20,12 +20,12 @@ public class MewlerOut extends Thread
 	private volatile long messageDelayMillis = 500;
 	private volatile long lineDelayMillis = 100;
 
-	public MewlerOut(OutputStream out)
+	public IrcOutgoingThread(OutputStream out)
 	{
 		this(out, null);
 	}
 
-	public MewlerOut(OutputStream out, ThreadGroup tg)
+	public IrcOutgoingThread(OutputStream out, ThreadGroup tg)
 	{
 		super(tg, "InternetRelayCats.Mewler-Output-Thread");
 		this.outputStream = out;

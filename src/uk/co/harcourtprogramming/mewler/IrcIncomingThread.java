@@ -8,12 +8,12 @@ import uk.co.harcourtprogramming.mewler.servermesasges.AbstractIrcMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPrivmsg;
 
-class MewlerIn extends Thread
+class IrcIncomingThread extends Thread
 {
 	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
 	private volatile boolean died = false;
 
-	protected final Mewler outer;
+	protected final IrcConnection outer;
 	protected final BufferedReader inputStream;
 	protected final TimeoutThread timeout;
 
@@ -35,7 +35,7 @@ class MewlerIn extends Thread
 				try
 				{
 					Thread.sleep(timeout);
-					MewlerIn.this.interrupt();
+					IrcIncomingThread.this.interrupt();
 				}
 				catch (InterruptedException ex)
 				{
@@ -45,12 +45,12 @@ class MewlerIn extends Thread
 		}
 	}
 
-	protected MewlerIn(BufferedReader inputStream, Mewler outer)
+	protected IrcIncomingThread(BufferedReader inputStream, IrcConnection outer)
 	{
 		this(inputStream, null, outer);
 	}
 
-	protected MewlerIn(BufferedReader inputStream, ThreadGroup tg, Mewler outer)
+	protected IrcIncomingThread(BufferedReader inputStream, ThreadGroup tg, IrcConnection outer)
 	{
 		super(tg, "InternetRelayCats.Mewler-Input-Thread");
 		this.outer = outer;

@@ -8,14 +8,14 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLSocketFactory;
-import uk.co.harcourtprogramming.mewler.Mewler;
+import uk.co.harcourtprogramming.mewler.IrcConnection;
 import uk.co.harcourtprogramming.mewler.servermesasges.User;
 
 /**
  * <p>Internal wrapper for {@link PircBot} that allows us to hide much of
  * the 'functionality'</p>
  */
-public class MewlerImpl extends Mewler
+public class MewlerImpl extends IrcConnection
 {
 
 	private final InternetRelayCat inst;

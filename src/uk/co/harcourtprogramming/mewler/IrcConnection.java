@@ -21,7 +21,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
 /**
  *
  */
-public class Mewler
+public class IrcConnection
 {
 	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
 	static
@@ -79,11 +79,11 @@ public class Mewler
 		LOG.setUseParentHandlers(false);
 	}
 
-	private final MewlerOut outputThread;
-	private final MewlerIn inputThread;
+	private final IrcOutgoingThread outputThread;
+	private final IrcIncomingThread inputThread;
 	private String nick = null;
 
-	public Mewler(final InputStream input, final OutputStream output, final ThreadGroup tg)
+	public IrcConnection(final InputStream input, final OutputStream output, final ThreadGroup tg)
 	{
 		if (input == null) throw new IllegalArgumentException("InputStream must be a valid, active stream");
 		try
@@ -105,8 +105,8 @@ public class Mewler
 			throw new IllegalArgumentException("InputStream must be a valid, active stream");
 		}
 
-		outputThread = new MewlerOut(output, tg);
-		inputThread = new MewlerIn(new BufferedReader(new InputStreamReader(input)), tg, this);
+		outputThread = new IrcOutgoingThread(output, tg);
+		inputThread = new IrcIncomingThread(new BufferedReader(new InputStreamReader(input)), tg, this);
 	}
 
 	public synchronized void connect(final String nick, final String password, final String realName) throws IOException
