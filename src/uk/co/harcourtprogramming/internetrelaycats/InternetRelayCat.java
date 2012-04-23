@@ -232,7 +232,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	@Override
 	public synchronized void run()
 	{
-		// FIXME: This will no lnoger work due to re-connection ability
+		// FIXME: This will no longer work due to re-connection ability
 		// TODO: Migrate this code to a Thead object, rather than runnable?
 		if (bot != null) return; // Prevents re-running
 
