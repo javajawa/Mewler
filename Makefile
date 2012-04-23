@@ -42,7 +42,9 @@ $(TBUILD)/%.class : $(TEST)/%.java $(LIBS) compile $(TBUILD)
 $(PACKAGEJAR): $(PACKAGE) $(BUILD) $(CLASS) $(LIBS)
 	-rm -f $(PACKAGEJAR)
 	$(JAR) cfm $(PACKAGEJAR) Manifest.mf -C $(BUILD) .
-	-cp $(LIBS) $(PACKAGE)
+ifneq "$(LIBS)" ""
+	cp $(LIBS) $(PACKAGE)
+endif
 
 $(BUILD):
 	-mkdir $@
