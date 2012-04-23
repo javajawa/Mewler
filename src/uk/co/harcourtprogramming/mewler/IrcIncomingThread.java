@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import uk.co.harcourtprogramming.mewler.servermesasges.AbstractIrcMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
+import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPrivmsg;
 
 class IrcIncomingThread extends Thread
@@ -79,6 +80,11 @@ class IrcIncomingThread extends Thread
 				{
 					timeout.interrupt();
 					outer.onPing((IrcPingMessage)mess);
+				}
+				else if (mess instanceof IrcPongMessage)
+				{
+					timeout.interrupt();
+					outer.onPong((IrcPongMessage)mess);
 				}
 				else if (mess instanceof IrcPrivmsg)
 				{

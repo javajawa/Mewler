@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
+import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcResponseCode;
 import uk.co.harcourtprogramming.mewler.servermesasges.User;
 
@@ -81,6 +82,7 @@ public class IrcConnection
 
 	private final IrcOutgoingThread outputThread;
 	private final IrcIncomingThread inputThread;
+	private final IrcPingThread pingThead;
 	private String nick = null;
 
 	public IrcConnection(final InputStream input, final OutputStream output, final ThreadGroup tg)
@@ -107,6 +109,7 @@ public class IrcConnection
 
 		outputThread = new IrcOutgoingThread(output, tg);
 		inputThread = new IrcIncomingThread(new BufferedReader(new InputStreamReader(input)), tg, this);
+		pingThead = new IrcPingThread(tg, outputThread);
 	}
 
 	public synchronized void connect(final String nick, final String password, final String realName) throws IOException
@@ -187,6 +190,7 @@ public class IrcConnection
 						this.nick = currNick;
 						inputThread.start();
 						outputThread.start();
+						pingThead.start();
 						return;
 
 					default:
@@ -250,6 +254,7 @@ public class IrcConnection
 	{
 		outputThread.interrupt();
 		inputThread.interrupt();
+		pingThead.dispose();
 	}
 
 	public String getNick()
@@ -282,6 +287,11 @@ public class IrcConnection
 		{
 			LOG.log(Level.SEVERE, "Exception when replying to PING", ex);
 		}
+	}
+
+	protected void onPong(IrcPongMessage pong)
+	{
+		pingThead.onPong(pong);
 	}
 
 	protected boolean isAlive()

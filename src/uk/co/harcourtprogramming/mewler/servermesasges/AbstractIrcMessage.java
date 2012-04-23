@@ -48,6 +48,8 @@ abstract public class AbstractIrcMessage
 			{
 				case PING:
 					return new IrcPingMessage(origin, tokeniser);
+				case PONG:
+					return new IrcPongMessage(origin, tokeniser);
 				case PRIVMSG:
 					return new IrcPrivmsg(origin, tokeniser, asNick);
 				default:

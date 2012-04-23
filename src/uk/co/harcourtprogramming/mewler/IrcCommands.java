@@ -9,6 +9,7 @@ public enum IrcCommands
 	 * Parameters: &gt;username&lt; &gt;hostname&lt; &gt;servername&lt; &gt;realname&lt;
 	 */
 	USER("USER %s %s %s :%s\r\n"),
+	PING("PING :%s\r\n"),
 	PONG("PONG :%s\r\n"),
 	JOIN("JOIN %s\r\n"),
 	JOIN_PASS("JOIN %s %s\r\n"),
