@@ -46,4 +46,10 @@ public class User
 		return host;
 	}
 
+	@Override
+	public String toString()
+	{
+		return getUser() + '@' + getHost();
+	}
+
 }
