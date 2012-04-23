@@ -78,6 +78,8 @@ public class IrcConnection
 		});
 		LOG.addHandler(h);
 		LOG.setUseParentHandlers(false);
+		LOG.setLevel(Level.FINE);
+		h.setLevel(Level.ALL);
 	}
 
 	private final IrcOutgoingThread outputThread;
