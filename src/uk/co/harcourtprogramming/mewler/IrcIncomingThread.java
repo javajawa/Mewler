@@ -67,6 +67,7 @@ class IrcIncomingThread extends Thread
 	@Override
 	public void run()
 	{
+		timeout.start();
 		try
 		{
 			while (true)
