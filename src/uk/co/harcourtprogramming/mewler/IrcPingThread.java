@@ -11,14 +11,16 @@ class IrcPingThread extends Thread
 	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
 
 	private final IrcOutgoingThread outThread;
+	private final IrcConnection outer;
 	private final Random r = new Random();
 
 	private long nonce;
 	private boolean kill;
 
-	IrcPingThread(ThreadGroup tg, IrcOutgoingThread outThread)
+	IrcPingThread(ThreadGroup tg, IrcConnection outer, IrcOutgoingThread outThread)
 	{
 		super(tg, "InternetRelayCats.Mewler-Ping-Thread");
+		this.outer = outer;
 		this.outThread = outThread;
 	}
 
@@ -50,6 +52,8 @@ class IrcPingThread extends Thread
 			return;
 		}
 		LOG.log(Level.FINE, "PONG not received");
+		outer.onDisconnect();
+		outer.dispose();
 	}
 
 	private synchronized boolean ping(long n) throws InterruptedException

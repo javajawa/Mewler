@@ -109,7 +109,7 @@ public class IrcConnection
 
 		outputThread = new IrcOutgoingThread(output, tg);
 		inputThread = new IrcIncomingThread(new BufferedReader(new InputStreamReader(input)), tg, this);
-		pingThead = new IrcPingThread(tg, outputThread);
+		pingThead = new IrcPingThread(tg, this, outputThread);
 	}
 
 	public synchronized void connect(final String nick, final String password, final String realName) throws IOException
