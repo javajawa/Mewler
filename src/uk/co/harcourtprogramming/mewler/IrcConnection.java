@@ -179,7 +179,7 @@ public class IrcConnection
 				{
 					case ERR_NICKNAMEINUSE:
 					case ERR_NICKCOLLISION:
-						LOG.log(Level.FINE, ">> Nick in use, trying again");
+						LOG.log(Level.FINE, "Nick in use, trying again");
 						currNick = nick + "-" + nicksTried;
 						commandString = IrcCommands.createCommandString(IrcCommands.NICK, currNick);
 						outputThread.send(commandString);
