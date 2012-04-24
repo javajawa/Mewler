@@ -2,11 +2,11 @@ package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.Calendar;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.LogRecord;
 import java.util.logging.Level;
+import uk.co.harcourtprogramming.logging.LogFormatter;
 
 /**
  * <p>The base class for Services for {@link RelayCat}</p>
@@ -57,7 +57,7 @@ public abstract class Service
 	public Service()
 	{
 		final Handler h = new ConsoleHandler();
-		h.setFormatter(new Formatter()
+		h.setFormatter(new LogFormatter()
 		{
 			@Override
 			public String format(LogRecord l)
@@ -65,8 +65,12 @@ public abstract class Service
 				Calendar c = Calendar.getInstance();
 				c.setTimeInMillis(l.getMillis());
 
-				return String.format("[%2$tR %3$s] %1$s >> %4$s\n",
-				    Service.this, c, l.getLevel().toString(), formatMessage(l));
+				return String.format("[%3$tD %3$tR %2$s] %1$s >> %4$s\n",
+					Service.this,
+					l.getLevel().getLocalizedName(),
+					c,
+					formatMessage(l)
+				);
 			}
 		});
 		log.addHandler(h);
