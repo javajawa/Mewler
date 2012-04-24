@@ -7,12 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Calendar;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
@@ -25,62 +20,6 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
 public class IrcConnection
 {
 	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
-	static
-	{
-		Handler h = new ConsoleHandler();
-		h.setFormatter(new Formatter()
-		{
-			@Override
-			public String format(LogRecord l)
-			{
-				Calendar time = Calendar.getInstance();
-				time.setTimeInMillis(l.getMillis());
-
-				return String.format("[%2$tR %1$s] %3$s\n",
-					l.getLevel().getLocalizedName(), time, formatMessage(l));
-			}
-
-			@Override
-			public synchronized String formatMessage(LogRecord record)
-			{
-				if (record.getMessage() == null)
-				{
-					if (record.getThrown() == null)
-					{
-						return String.format("null log from <%3s>%1s::%2s", record.getSourceClassName(), record.getSourceMethodName(), Thread.currentThread().getName());
-					}
-					else
-					{
-						Throwable thrown = record.getThrown();
-						return String.format("%s <%s>%s::%s\n\t%s",
-							thrown.getClass().getName(),
-							Thread.currentThread().getName(),
-							record.getSourceClassName(),
-							record.getSourceMethodName(),
-							thrown.getLocalizedMessage()
-						);
-					}
-				}
-				if (record.getThrown() == null)
-				{
-					return super.formatMessage(record);
-				}
-				Throwable thrown = record.getThrown();
-				return String.format("%s <%s>%s::%s\n\t%s\n\t%s",
-					thrown.getClass().getName(),
-					Thread.currentThread().getName(),
-					record.getSourceClassName(),
-					record.getSourceMethodName(),
-					super.formatMessage(record),
-					thrown.getLocalizedMessage()
-				);
-			}
-		});
-		LOG.addHandler(h);
-		LOG.setUseParentHandlers(false);
-		LOG.setLevel(Level.FINE);
-		h.setLevel(Level.ALL);
-	}
 
 	private final IrcOutgoingThread outputThread;
 	private final IrcIncomingThread inputThread;

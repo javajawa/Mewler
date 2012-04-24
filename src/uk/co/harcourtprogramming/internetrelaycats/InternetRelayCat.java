@@ -2,13 +2,8 @@ package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.logging.LogRecord;
 import java.util.logging.Level;
 import java.io.IOException;
 
@@ -22,60 +17,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * <p>The logger for the bot</p>
 	 */
 	private final static Logger log = Logger.getLogger("InternetRelayCat");
-	static
-	{
-		Handler h = new ConsoleHandler();
-		h.setFormatter(new Formatter()
-		{
-			@Override
-			public String format(LogRecord l)
-			{
-				Calendar time = Calendar.getInstance();
-				time.setTimeInMillis(l.getMillis());
 
-				return String.format("[%2$tD %2$tR %1$s] %3$s\n",
-					l.getLevel().getLocalizedName(), time, formatMessage(l));
-			}
-
-			@Override
-			public synchronized String formatMessage(LogRecord record)
-			{
-				if (record.getMessage() == null)
-				{
-					if (record.getThrown() == null)
-					{
-						return String.format("null log from <%3s>%1s::%2s", record.getSourceClassName(), record.getSourceMethodName(), Thread.currentThread().getName());
-					}
-					else
-					{
-						Throwable thrown = record.getThrown();
-						return String.format("%s <%s>%s::%s\n\t%s",
-							thrown.getClass().getName(),
-							Thread.currentThread().getName(),
-							record.getSourceClassName(),
-							record.getSourceMethodName(),
-							thrown.getLocalizedMessage()
-						);
-					}
-				}
-				if (record.getThrown() == null)
-				{
-					return super.formatMessage(record);
-				}
-				Throwable thrown = record.getThrown();
-				return String.format("%s <%s>%s::%s\n\t%s\n\t%s",
-					thrown.getClass().getName(),
-					Thread.currentThread().getName(),
-					record.getSourceClassName(),
-					record.getSourceMethodName(),
-					super.formatMessage(record),
-					thrown.getLocalizedMessage()
-				);
-			}
-		});
-		log.addHandler(h);
-		log.setUseParentHandlers(false);
-	}
 	static Logger getLogger()
 	{
 		return log;
