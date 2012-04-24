@@ -8,7 +8,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 
 class IrcPingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
+	private final static Logger LOG = Logger.getLogger("Mewler");
 
 	private final IrcOutgoingThread outThread;
 	private final IrcConnection outer;

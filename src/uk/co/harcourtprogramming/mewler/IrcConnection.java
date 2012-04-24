@@ -19,7 +19,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
  */
 public class IrcConnection
 {
-	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
+	private final static Logger LOG = Logger.getLogger("Mewler");
 
 	private final IrcOutgoingThread outputThread;
 	private final IrcIncomingThread inputThread;

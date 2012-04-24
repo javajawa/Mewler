@@ -12,7 +12,7 @@ import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
  */
 public class IrcOutgoingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
+	private final static Logger LOG = Logger.getLogger("Mewler");
 
 	private final OutputStream outputStream;
 	private final BlockingQueue<OutQueueMessage> messageQueue =

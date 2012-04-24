@@ -11,7 +11,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.IrcPrivmsg;
 
 class IrcIncomingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("InternetRelatCats.Mewler");
+	private final static Logger LOG = Logger.getLogger("Mewler");
 	private volatile boolean died = false;
 
 	protected final IrcConnection outer;
