@@ -47,11 +47,11 @@ ifneq "$(LIBS)" ""
 endif
 
 $(BUILD):
-	-mkdir $@
+	mkdir -p $@
 $(TBUILD):
-	-mkdir $@
+	mkdir -p $@
 $(PACKAGE):
-	-mkdir $@
+	mkdir -p $@
 
 clean:
 	-rm -f $(BUILD) -r
