@@ -18,13 +18,13 @@ LIBS=$(wildcard lib/*.jar)
 CP=$(SRC):$(LIBS: =:)
 TCP=$(TEST):$(BUILD):$(JUNIT):$(LIBS: =:)
 
-FILES=$(wildcard $(SRC)/uk/co/harcourtprogramming/internetrelaycats/*.java) $(wildcard $(SRC)/uk/co/harcourtprogramming/mewler/*.java)
+FILES=$(shell find $(SRC) -iname *.java)
 CLASS=$(patsubst $(SRC)/%.java,$(BUILD)/%.class,$(FILES))
 
-TFILES=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*.java) $(wildcard $(TEST)/uk/co/harcourtprogramming/mewler/*.java)
+TFILES=$(shell find $(TEST) -iname *.java)
 TCLASS=$(patsubst $(TEST)/%.java,$(TBUILD)/%.class,$(TFILES))
 
-TESTABLE=$(wildcard $(TEST)/uk/co/harcourtprogramming/internetrelaycats/*Test.java) $(wildcard $(TEST)/uk/co/harcourtprogramming/mewler/*Test.java)
+TESTABLE=$(shell find $(TEST) -iname *Test.java)
 TESTS=$(patsubst $(TEST).%.java,%,$(subst /,.,$(TESTABLE)))
 
 package: $(PACKAGEJAR)
