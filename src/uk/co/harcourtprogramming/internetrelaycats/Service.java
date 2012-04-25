@@ -93,7 +93,7 @@ public abstract class Service
 	 * @param ex Throwable associated with log message.
 	 * @see Logger#log(java.util.logging.Level, java.lang.String, java.lang.Throwable)
 	 */
-	public void log(Level lvl, String msg, Throwable ex)
+	protected final void log(Level lvl, String msg, Throwable ex)
 	{
 		LOG.log(lvl, ex, msg);
 	}
@@ -106,7 +106,7 @@ public abstract class Service
 	 * @param lvl One of the message level identifiers, e.g. SEVERE
 	 * @param msg The string message (or a key in the message catalog)
 	 */
-	public void log(Level lvl, String msg)
+	protected final void log(Level lvl, String msg)
 	{
 		LOG.log(lvl, null, msg);
 	}
@@ -120,7 +120,7 @@ public abstract class Service
 	 * @param msg The string message (or a key in the message catalog)
 	 * @param params array of parameters to the message
 	 */
-	public void log(Level lvl, String msg, Object[] params)
+	protected final void log(Level lvl, String msg, Object[] params)
 	{
 		LOG.log(lvl, null, msg, params);
 	}
@@ -138,7 +138,7 @@ public abstract class Service
 	 * @param ex Throwable associated with log message.
 	 * @see Logger#log(java.util.logging.Level, java.lang.String, java.lang.Throwable)
 	 */
-	public void log(Level lvl, Throwable ex)
+	protected final void log(Level lvl, Throwable ex)
 	{
 		LOG.log(lvl, ex, null);
 	}
@@ -171,5 +171,5 @@ public abstract class Service
 	 * remove a service, use {@link IRelayCat#unregister(Service)
 	 * IRelayCat.unregister}</p>
 	 */
-	public abstract void shutdown();
+	protected abstract void shutdown();
 }
