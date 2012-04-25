@@ -13,7 +13,7 @@ class OutQueueMessage implements Serializable, Comparable<OutQueueMessage>
 	public final long timestamp;
 	public final String message;
 
-	public OutQueueMessage(final int priority, final String message)
+	OutQueueMessage(final int priority, final String message)
 	{
 		this.priority = priority;
 		this.message = message;
