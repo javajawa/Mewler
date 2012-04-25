@@ -1,7 +1,6 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>An external service is a {@link InternetRelayCat} {@link Service} that runs in a

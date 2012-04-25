@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcResponseCode;
@@ -19,7 +18,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.User;
  */
 public class IrcConnection
 {
-	private final static Logger LOG = Logger.getLogger("Mewler");
+	private final static LogDecorator LOG = LogDecorator.getLogger("Mewler");
 
 	private final IrcOutgoingThread outputThread;
 	private final IrcIncomingThread inputThread;
@@ -99,13 +98,13 @@ public class IrcConnection
 
 			if (mess instanceof IrcPingMessage)
 			{
-				LOG.log(Level.FINER, ">> {0}", mess.toString());
+				LOG.finer(">> {0}", mess.toString());
 				outputThread.send(((IrcPingMessage)mess).reply());
 			}
 			else if (mess instanceof IrcMessage)
 			{
 				final IrcMessage message = (IrcMessage)mess;
-				LOG.log(Level.FINER, ">> {0}", mess.toString());
+				LOG.finer(">> {0}", mess.toString());
 				if (message.getMessageType().equals("ERROR"))
 				{
 					dispose();
@@ -120,14 +119,14 @@ public class IrcConnection
 				{
 					case ERR_NICKNAMEINUSE:
 					case ERR_NICKCOLLISION:
-						LOG.log(Level.FINE, "Nick in use, trying again");
+						LOG.fine("Nick in use, trying again");
 						currNick = nick + "-" + nicksTried;
 						commandString = IrcCommands.createCommandString(IrcCommands.NICK, currNick);
 						outputThread.send(commandString);
 						break;
 					case RPL_MOTDSTART:
 					case RPL_MOTD:
-						LOG.log(Level.FINE, "Sucessfully connected!!!");
+						LOG.fine("Sucessfully connected");
 						this.nick = currNick;
 						inputThread.start();
 						outputThread.start();
@@ -135,13 +134,13 @@ public class IrcConnection
 						return;
 
 					default:
-						LOG.log(Level.FINER, ">> {0}", mess.toString());
+						LOG.finer(">> {0}", mess.toString());
 						// TODO: do something with messages of other codes
 				}
 			}
 			else
 			{
-				LOG.log(Level.FINER, ">> {0}", mess.toString());
+				LOG.finer(">> {0}", mess.toString());
 			}
 		}
 	}
@@ -226,7 +225,7 @@ public class IrcConnection
 		}
 		catch (IOException ex)
 		{
-			LOG.log(Level.SEVERE, "Exception when replying to PING", ex);
+			LOG.severe("Exception when replying to PING", ex);
 		}
 	}
 

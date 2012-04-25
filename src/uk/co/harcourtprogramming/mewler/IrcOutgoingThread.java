@@ -3,16 +3,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 /**
  *
  * @author Benedict
  */
 public class IrcOutgoingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("Mewler");
+	private final static LogDecorator LOG = LogDecorator.getLogger("Mewler");
 
 	private final OutputStream outputStream;
 	private final BlockingQueue<OutQueueMessage> messageQueue =
@@ -50,7 +49,7 @@ public class IrcOutgoingThread extends Thread
 		while (true)
 		{
 			String line = splitter.nextTokenWithDelim("\r\n");
-			LOG.log(Level.FINER, "<< {0}", line.substring(0, line.length() - 2));
+			LOG.finer("<< {0}", line.substring(0, line.length() - 2));
 			outputStream.write(line.getBytes());
 			outputStream.flush();
 			if (splitter.isEmpty()) break;
@@ -81,18 +80,18 @@ public class IrcOutgoingThread extends Thread
 		}
 		catch (IOException ex)
 		{
-			LOG.log(Level.SEVERE, "Error in Thread" + getName(), ex);
+			LOG.severe("Error in Thread" + getName(), ex);
 		}
 		finally
 		{
-			LOG.log(Level.FINE, "{0} closing", getName());
+			LOG.fine("{0} closing", getName());
 			try
 			{
 				outputStream.close();
 			}
 			catch (IOException ex)
 			{
-				LOG.log(Level.SEVERE, "Error in Thread" + getName(), ex);
+				LOG.severe("Error in Thread" + getName(), ex);
 			}
 		}
 

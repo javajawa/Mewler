@@ -2,8 +2,7 @@ package uk.co.harcourtprogramming.mewler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.servermesasges.AbstractIrcMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
@@ -11,7 +10,7 @@ import uk.co.harcourtprogramming.mewler.servermesasges.IrcPrivmsg;
 
 class IrcIncomingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("Mewler");
+	private final static LogDecorator LOG = LogDecorator.getLogger("Mewler");
 	private volatile boolean died = false;
 
 	protected final IrcConnection outer;
@@ -75,7 +74,7 @@ class IrcIncomingThread extends Thread
 				String s = inputStream.readLine();
 				if (s == null) break;
 				AbstractIrcMessage mess = AbstractIrcMessage.parse(s, outer.getNick());
-				LOG.log(Level.FINER, ">> {0}", mess.toString());
+				LOG.finer(">> {0}", mess.toString());
 
 				if (mess instanceof IrcPingMessage)
 				{
@@ -103,7 +102,7 @@ class IrcIncomingThread extends Thread
 		}
 		catch (IOException ex)
 		{
-			LOG.log(Level.SEVERE, null, ex);
+			LOG.severe(ex, null);
 		}
 		finally
 		{
@@ -113,7 +112,7 @@ class IrcIncomingThread extends Thread
 			}
 			catch (IOException ex)
 			{
-				LOG.log(Level.SEVERE, "Error whilst closing input stream", ex);
+				LOG.severe(ex, "Error whilst closing input stream");
 			}
 			finally
 			{

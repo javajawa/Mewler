@@ -2,13 +2,12 @@ package uk.co.harcourtprogramming.mewler;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 
 class IrcPingThread extends Thread
 {
-	private final static Logger LOG = Logger.getLogger("Mewler");
+	private final static LogDecorator LOG = LogDecorator.getLogger("Mewler");
 
 	private final IrcOutgoingThread outThread;
 	private final IrcConnection outer;
@@ -28,12 +27,12 @@ class IrcPingThread extends Thread
 	{
 		if (Long.parseLong(pong.getNonce(), 16) == nonce)
 		{
-			LOG.log(Level.FINER, "PONG nonce value {0} received correctly", pong.getNonce());
+			LOG.finer("PONG nonce value {0} received correctly", pong.getNonce());
 			nonce = 0;
 		}
 		else
 		{
-			LOG.log(Level.INFO, "Unexpected PONG nonce value{0}", pong.getNonce());
+			LOG.info("Unexpected PONG nonce value{0}", pong.getNonce());
 		}
 	}
 
@@ -48,10 +47,10 @@ class IrcPingThread extends Thread
 		}
 		catch (InterruptedException ex)
 		{
-			LOG.log(Level.FINE, "{0} closing", getName());
+			LOG.fine("{0} closing", getName());
 			return;
 		}
-		LOG.log(Level.FINE, "PONG not received");
+		LOG.fine("PONG not received");
 		outer.onDisconnect();
 		outer.dispose();
 	}
@@ -65,7 +64,7 @@ class IrcPingThread extends Thread
 		}
 		catch (IOException ex)
 		{
-			LOG.log(Level.SEVERE, "Unable to send Ping", ex);
+			LOG.severe("Unable to send Ping", ex);
 			return false;
 		}
 

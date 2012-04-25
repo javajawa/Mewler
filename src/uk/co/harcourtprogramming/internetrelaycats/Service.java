@@ -6,6 +6,7 @@ import java.util.logging.Handler;
 import java.util.logging.Logger;
 import java.util.logging.LogRecord;
 import java.util.logging.Level;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.logging.LogFormatter;
 
 /**
@@ -46,8 +47,7 @@ public abstract class Service
 	/**
 	 * Logger for this service
 	 */
-	@SuppressWarnings("NonConstantLogger") // Logger for *each* service
-	private final Logger log = Logger.getLogger("InternetRelayCats.Service." + id);
+	private final LogDecorator LOG;
 
 	/**
 	 * <p>Create the general implementation of a Service</p>
@@ -73,8 +73,10 @@ public abstract class Service
 				);
 			}
 		});
+		Logger log = Logger.getLogger("InternetRelayCats.Service." + id);
 		log.addHandler(h);
 		log.setUseParentHandlers(false);
+		LOG = new LogDecorator(log);
 	}
 
 	/**
@@ -93,7 +95,7 @@ public abstract class Service
 	 */
 	public void log(Level lvl, String msg, Throwable ex)
 	{
-		log.log(lvl, msg, ex);
+		LOG.log(lvl, ex, msg);
 	}
 
 	/**
@@ -106,7 +108,7 @@ public abstract class Service
 	 */
 	public void log(Level lvl, String msg)
 	{
-		log.log(lvl, msg);
+		LOG.log(lvl, null, msg);
 	}
 
 	/**
@@ -120,7 +122,7 @@ public abstract class Service
 	 */
 	public void log(Level lvl, String msg, Object[] params)
 	{
-		log.log(lvl, msg, params);
+		LOG.log(lvl, null, msg, params);
 	}
 
 	/**
@@ -138,7 +140,7 @@ public abstract class Service
 	 */
 	public void log(Level lvl, Throwable ex)
 	{
-		log.log(lvl, null, ex);
+		LOG.log(lvl, ex, null);
 	}
 
 	/**
