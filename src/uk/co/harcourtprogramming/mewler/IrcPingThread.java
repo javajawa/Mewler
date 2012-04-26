@@ -51,8 +51,11 @@ class IrcPingThread extends Thread
 			return;
 		}
 		LOG.fine("PONG not received");
-		outer.onDisconnect();
-		outer.dispose();
+		if (outer.isAlive())
+		{
+			outer.onDisconnect();
+			outer.dispose();
+		}
 	}
 
 	private synchronized boolean ping(long n) throws InterruptedException

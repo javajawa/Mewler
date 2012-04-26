@@ -117,8 +117,11 @@ class IrcIncomingThread extends Thread
 			finally
 			{
 				died = true;
-				outer.onDisconnect();
-				outer.dispose();
+				if (outer.isAlive())
+				{
+					outer.onDisconnect();
+					outer.dispose();
+				}
 			}
 		}
 	}
