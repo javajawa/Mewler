@@ -58,6 +58,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	 * <p>instance of the underlying bot interface</p>
 	 */
 	protected MewlerImpl bot;
+	protected final Object botLock = new Object();
 
 	/**
 	 * <p>Creates a InternetRelayCat instance</p>
@@ -329,11 +330,18 @@ public class InternetRelayCat implements Runnable, RelayCat
 
 	void onDisconnect()
 	{
+		synchronized (botLock)
+		{
+			if (bot == null) return;
+			bot = null;
+		}
+
 		log.log(Level.WARNING, "Disconnected from server.");
 		// TODO: Add controls for reconnection
-		bot = null;
 
 		if (isDispose()) return;
+
+		// FIXME: This is a mess.
 		new Thread("Reconnect Thread") {
 
 			@Override
@@ -346,12 +354,18 @@ public class InternetRelayCat implements Runnable, RelayCat
 				}
 				catch (InterruptedException ex)
 				{
-					throw new Error(ex);
+					throw new RuntimeException(ex);
 				}
-				bot = connect();
-				// See if we actually achieved a connection
-				if (bot == null)
-					onDisconnect();
+
+				if (isDispose()) return;
+				synchronized (botLock)
+				{
+					if (bot != null) return;
+					bot = connect();
+					// See if we actually achieved a connection
+					if (bot == null)
+						onDisconnect();
+				}
 			}
 		}.start();
 	}
