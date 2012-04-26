@@ -2,6 +2,7 @@ package uk.co.harcourtprogramming.mewler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.SocketException;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.servermesasges.AbstractIrcMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
@@ -99,6 +100,10 @@ class IrcIncomingThread extends Thread
 					}
 				}
 			}
+		}
+		catch (SocketException ex)
+		{
+			LOG.severe(ex, "Socket Exception - Possible Remote Disconnection");
 		}
 		catch (IOException ex)
 		{

@@ -23,6 +23,7 @@ public class IrcConnection
 	private final IrcOutgoingThread outputThread;
 	private final IrcIncomingThread inputThread;
 	private final IrcPingThread pingThead;
+
 	private String nick = null;
 
 	public IrcConnection(final InputStream input, final OutputStream output, final ThreadGroup tg)
@@ -54,6 +55,7 @@ public class IrcConnection
 
 	public synchronized void connect(final String nick, final String password, final String realName) throws IOException
 	{
+		// TODO: Figure out why this was included!
 		if (inputThread.isAlive() && !inputThread.isDead())
 			return; // TODO: Do we want to throw an exception here
 
