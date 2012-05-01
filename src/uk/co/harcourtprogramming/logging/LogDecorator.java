@@ -1,7 +1,6 @@
 package uk.co.harcourtprogramming.logging;
 
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
@@ -77,6 +76,14 @@ public class LogDecorator
 	{
 		LogRecord r = new LogRecord(lvl, messForm);
 		r.setParameters(params);
+		r.setThrown(ex);
+		inner.log(r);
+	}
+
+	public void uncaught(Thread t, Throwable ex)
+	{
+		LogRecord r = new LogRecord(t, Level.SEVERE, "Uncaught excpetion in ''{0}''");
+		r.setParameters(new Object[] {t.getName()});
 		r.setThrown(ex);
 		inner.log(r);
 	}
