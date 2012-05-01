@@ -29,16 +29,8 @@ public class IrcConnection
 	public IrcConnection(final InputStream input, final OutputStream output, final ThreadGroup tg)
 	{
 		if (input == null) throw new IllegalArgumentException("InputStream must be a valid, active stream");
-		try
-		{
-			input.available();
-		}
-		catch (IOException ex)
-		{
-			throw new IllegalArgumentException("InputStream must be a valid, active stream");
-		}
+		if (output == null) throw new IllegalArgumentException("OutputStream must be a valid, active stream");
 
-		if (input == null) throw new IllegalArgumentException("InputStream must be a valid, active stream");
 		try
 		{
 			input.available();
