@@ -154,7 +154,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 			if (s instanceof FilterService)
 			{
 				fsrvs.add((FilterService)s);
-				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
+				log.log(Level.INFO, "Service {0}@{1} loaded as FilterService.",
 				    new Object[]{s.getClass().getSimpleName(), s.getId()});
 			}
 			srvs.add(s);
