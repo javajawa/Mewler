@@ -1,7 +1,5 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
-import java.util.logging.Level;
-
 /**
  * <p>An external service is a {@link InternetRelayCat} {@link Service} that runs in a
  * separate thread from the IRC interface.</p>
@@ -19,13 +17,9 @@ public abstract class ExternalService extends Service implements Runnable
 		new ThreadGroup("ExternalServices")
 		{
 			@Override
-			public void uncaughtException(Thread t, Throwable e)
+			public void uncaughtException(Thread t, Throwable ex)
 			{
-				InternetRelayCat.getLogger().log(
-					Level.SEVERE,
-					"Uncaught Exception in " + t.getName(),
-					e
-				);
+				InternetRelayCat.getLogger().uncaught(t, ex);
 			}
 		};
 	/**

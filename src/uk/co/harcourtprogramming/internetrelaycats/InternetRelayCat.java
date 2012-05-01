@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.io.IOException;
 import java.net.NoRouteToHostException;
 import javax.net.ssl.SSLException;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 
 /**
  * <p>The main class for InternetRelayCats</p>
@@ -18,9 +19,9 @@ public class InternetRelayCat implements Runnable, RelayCat
 	/**
 	 * <p>The logger for the bot</p>
 	 */
-	private final static Logger log = Logger.getLogger("InternetRelayCat");
+	private final static LogDecorator log = LogDecorator.getLogger("InternetRelayCats");
 
-	static Logger getLogger()
+	static LogDecorator getLogger()
 	{
 		return log;
 	}
@@ -145,19 +146,22 @@ public class InternetRelayCat implements Runnable, RelayCat
 					throw new IllegalArgumentException("Supplied External Service does not belong to this RelayCat instance");
 				es.getThread().start();
 			}
-			log.log(Level.INFO, "Service Loaded: {0}@{1}",
-			    new Object[]{s.getClass().getSimpleName(), s.getId()});
+			log.info("Service Loaded: {0}@{1}", s.getClass().getSimpleName(), s.getId());
 			if (s instanceof MessageService)
 			{
 				msrvs.add((MessageService)s);
-				log.log(Level.INFO, "Service {0}@{1} loaded as MessageService.",
-				    new Object[]{s.getClass().getSimpleName(), s.getId()});
+				log.info("Service {0}@{1} loaded as MessageService.",
+				    s.getClass().getSimpleName(),
+					s.getId()
+				);
 			}
 			if (s instanceof FilterService)
 			{
 				fsrvs.add((FilterService)s);
-				log.log(Level.INFO, "Service {0}@{1} loaded as FilterService.",
-				    new Object[]{s.getClass().getSimpleName(), s.getId()});
+				log.info("Service {0}@{1} loaded as FilterService.",
+				    s.getClass().getSimpleName(),
+					s.getId()
+				);
 			}
 			srvs.add(s);
 		}
@@ -187,7 +191,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 			shutdown();
 			return;
 		}
-		log.log(Level.INFO, "Operations Running!");
+		log.info("Operations Running!");
 
 		try
 		{
@@ -338,7 +342,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 			bot = null;
 		}
 
-		log.log(Level.WARNING, "Disconnected from server.");
+		log.warning("Disconnected from server.");
 		// TODO: Add controls for reconnection
 
 		if (isDispose()) return;
@@ -349,7 +353,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 			@Override
 			public void run()
 			{
-				log.log(Level.WARNING, "Waiting 30s for reconnect.");
+				log.warning("Waiting 30s for reconnect.");
 				try
 				{
 					Thread.sleep(30000);
@@ -379,37 +383,36 @@ public class InternetRelayCat implements Runnable, RelayCat
 		MewlerImpl newbot;
 		try
 		{
-			log.log(Level.INFO, "Connecting to ''{0}''", host);
+			log.info("Connecting to ''{0}''", host);
 			newbot = createBot(host, port, ssl);
 			newbot.connect(name, "", name);
 		}
 		catch (UnknownHostException ex)
 		{
-			log.log(Level.WARNING, "Unable to find host ''{0}''", host);
+			log.info("Unable to find host ''{0}''", host);
 			return null;
 		}
 		catch (SSLException ex)
 		{
-			log.log(Level.WARNING, "SSL error for host ''{0}'': {1}",
-				new Object[]{host, ex.getLocalizedMessage()});
+			log.info("SSL error for host ''{0}'': {1}", host, ex.getLocalizedMessage());
 			return null;
 		}
 		catch (NoRouteToHostException ex)
 		{
-			log.log(Level.WARNING, "No route to host ''{0}''", host);
+			log.warning("No route to host ''{0}''", host);
 			return null;
 		}
 		catch (IOException ex)
 		{
-			log.log(Level.SEVERE, "Problem when connecting to " + host, ex);
+			log.severe(ex, "Problem when connecting to ''{0}''", host);
 			return null;
 		}
 
-		log.log(Level.INFO, "Successfully connected.");
+		log.info("Successfully connected.");
 
 		for (String channel : channels)
 		{
-			log.log(Level.INFO, "Joining ''{0}''", channel);
+			log.info("Joining ''{0}''", channel);
 			newbot.join(channel);
 		}
 

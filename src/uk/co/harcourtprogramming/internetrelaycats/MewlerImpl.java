@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLSocketFactory;
+import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.IrcConnection;
 import uk.co.harcourtprogramming.mewler.servermesasges.User;
 
@@ -23,7 +24,7 @@ public class MewlerImpl extends IrcConnection
 	/**
 	 * Shared logger with {@link InternetRelayCat}
 	 */
-	private final static Logger log = InternetRelayCat.getLogger();
+	private final static LogDecorator log = InternetRelayCat.getLogger();
 
 	public static MewlerImpl create(InternetRelayCat inst, String host, int port, boolean ssl) throws UnknownHostException, IOException
 	{
@@ -70,13 +71,13 @@ public class MewlerImpl extends IrcConnection
 
 	public void onInput(Message m)
 	{
-		log.log(Level.FINE, "Input recieved: {0}", m);
+		log.fine("Input recieved: {0}", m);
 		if (inst == null) return;
 		synchronized (inst.getSrvs())
 		{
 			for (MessageService s : inst.getMsrvs())
 			{
-				log.log(Level.FINE, "Input dispatched to {0}",
+				log.fine("Input dispatched to {0}",
 					s.toString());
 				try
 				{
@@ -84,8 +85,7 @@ public class MewlerImpl extends IrcConnection
 				}
 				catch (Throwable ex)
 				{
-					log.log(Level.SEVERE,
-						"Error whilst passing input to " + s.toString(), ex);
+					log.severe(ex, "Error whilst passing input to ''{0}''", s);
 				}
 				if (m.isDisposed()) break;
 			}
