@@ -64,7 +64,7 @@ public abstract class ExternalService extends Service implements Runnable
 	 * @return reference to the Thread object this service will {@link #run()
 	 * run} in.
 	 */
-	protected final Thread getThread()
+	final Thread getThread()
 	{
 		return t;
 	}
