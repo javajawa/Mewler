@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
@@ -47,9 +48,11 @@ public class IrcConnection
 
 	public synchronized void connect(final String nick, final String password, final String realName) throws IOException
 	{
-		// TODO: Figure out why this was included!
-		if (inputThread.isAlive() && !inputThread.isDead())
-			return; // TODO: Do we want to throw an exception here
+		// Check if we've already attempted to connect through the currect socket
+		// .isAlive is false before start and after death. isDead becomes true before
+		// or as .isAlive becomes false at the end of thread life.
+		if (inputThread.isAlive() || inputThread.isDead())
+			throw new ConnectException("This IrcConnetion instance has already been connected");
 
 		if (nick == null || !nick.matches("[\\w<\\-\\[\\]\\^{}]+"))
 		{

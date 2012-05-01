@@ -61,7 +61,7 @@ class IrcIncomingThread extends Thread
 
 	protected final boolean isDead()
 	{
-		return died;
+		return died || this.getState() == State.TERMINATED;
 	}
 
 	@Override
