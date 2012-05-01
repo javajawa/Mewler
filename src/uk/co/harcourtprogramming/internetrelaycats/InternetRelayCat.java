@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.IOException;
+import java.net.NoRouteToHostException;
+import javax.net.ssl.SSLException;
 
 /**
  * <p>The main class for InternetRelayCats</p>
@@ -386,9 +388,25 @@ public class InternetRelayCat implements Runnable, RelayCat
 				newbot.join(channel);
 			}
 		}
+		catch (UnknownHostException ex)
+		{
+			log.log(Level.WARNING, "Unable to find host ''{0}''", host);
+			return null;
+		}
+		catch (SSLException ex)
+		{
+			log.log(Level.WARNING, "SSL error for host ''{0}'': {1}",
+				new Object[]{host, ex.getLocalizedMessage()});
+			return null;
+		}
+		catch (NoRouteToHostException ex)
+		{
+			log.log(Level.WARNING, "No route to host ''{0}''", host);
+			return null;
+		}
 		catch (IOException ex)
 		{
-			log.log(Level.SEVERE, null, ex);
+			log.log(Level.SEVERE, "Problem when connecting to " + host, ex);
 			return null;
 		}
 
