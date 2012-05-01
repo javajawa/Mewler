@@ -284,7 +284,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	@Override
 	public String[] channels()
 	{
-		return new String[]{}; // bot.getChannels(); TODO: Fixme
+		return channels.toArray(new String[0]); // bot.getChannels(); TODO: Fixme
 	}
 
 	@Override
