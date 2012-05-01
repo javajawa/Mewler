@@ -382,11 +382,6 @@ public class InternetRelayCat implements Runnable, RelayCat
 			log.log(Level.INFO, "Connecting to ''{0}''", host);
 			newbot = createBot(host, port, ssl);
 			newbot.connect(name, "", name);
-			for (String channel : channels)
-			{
-				log.log(Level.INFO, "Joining ''{0}''", channel);
-				newbot.join(channel);
-			}
 		}
 		catch (UnknownHostException ex)
 		{
@@ -408,6 +403,14 @@ public class InternetRelayCat implements Runnable, RelayCat
 		{
 			log.log(Level.SEVERE, "Problem when connecting to " + host, ex);
 			return null;
+		}
+
+		log.log(Level.INFO, "Successfully connected.");
+
+		for (String channel : channels)
+		{
+			log.log(Level.INFO, "Joining ''{0}''", channel);
+			newbot.join(channel);
 		}
 
 		synchronized (connlock)
