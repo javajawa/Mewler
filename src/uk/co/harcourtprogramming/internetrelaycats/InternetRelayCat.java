@@ -424,7 +424,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 		return newbot;
 	}
 
-	// ~TODO: Consider this for being added to RelayCat
+	// TODO: Consider this for being added to RelayCat
 	public void waitForConnection() throws InterruptedException
 	{
 		synchronized (connlock)
