@@ -14,9 +14,21 @@ public class LogRecord extends java.util.logging.LogRecord
 		thread = Thread.currentThread();
 	}
 
+	public LogRecord(Thread thread, Level level, String msg)
+	{
+		super(level, msg);
+		this.thread = thread;
+	}
+
+	@Override
 	public int getThreadID()
 	{
 		return (int)thread.getId();
+	}
+
+	public Thread getThread()
+	{
+		return thread;
 	}
 
 
