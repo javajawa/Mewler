@@ -1,7 +1,8 @@
 InternetRelayCats
 =================
 
-InternetRelayCats is wrapper / API which I accidentally wrote whilst developing DoCitten.
+InternetRelayCats is wrapper / API which I accidentally wrote whilst
+developing DoCitten.
 
 Mewler
 ======

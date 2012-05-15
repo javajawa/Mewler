@@ -3,8 +3,6 @@ package uk.co.harcourtprogramming.internetrelaycats;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.io.IOException;
 import java.net.NoRouteToHostException;
 import javax.net.ssl.SSLException;
@@ -348,8 +346,8 @@ public class InternetRelayCat implements Runnable, RelayCat
 		if (isDispose()) return;
 
 		// FIXME: This is a mess.
-		new Thread("Reconnect Thread") {
-
+		new Thread("Reconnect Thread")
+		{
 			@Override
 			public void run()
 			{
