@@ -400,7 +400,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 			log.warning("No route to host ''{0}''", host);
 			return null;
 		}
-		catch (IOException ex)
+		catch (Throwable ex)
 		{
 			log.severe(ex, "Problem when connecting to ''{0}''", host);
 			return null;
