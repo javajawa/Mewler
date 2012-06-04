@@ -77,6 +77,7 @@ public class LogDecorator
 		LogRecord r = new LogRecord(lvl, messForm);
 		r.setParameters(params);
 		r.setThrown(ex);
+		r.setLoggerName(inner.getName());
 		inner.log(r);
 	}
 
@@ -85,6 +86,7 @@ public class LogDecorator
 		LogRecord r = new LogRecord(t, Level.SEVERE, "Uncaught excpetion in ''{0}''");
 		r.setParameters(new Object[] {t.getName()});
 		r.setThrown(ex);
+		r.setLoggerName(inner.getName());
 		inner.log(r);
 	}
 }
