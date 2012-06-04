@@ -200,8 +200,11 @@ public class InternetRelayCat implements Runnable, RelayCat
 			shutdown();
 		}
 
-		bot.quit();
-		bot.dispose();
+		if (bot != null)
+		{
+			bot.quit();
+			bot.dispose();
+		}
 	}
 
 	/**
