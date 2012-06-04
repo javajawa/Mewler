@@ -10,6 +10,8 @@ import uk.co.harcourtprogramming.logging.LogDecorator;
 
 /**
  * <p>The main class for InternetRelayCats</p>
+ * FIXME: Offer access to an object to synchronize on for connection access to
+ * avoid NPEs
  */
 public class InternetRelayCat implements Runnable, RelayCat
 {
@@ -199,25 +201,30 @@ public class InternetRelayCat implements Runnable, RelayCat
 		{
 			shutdown();
 		}
-
-		if (bot != null)
-		{
-			bot.quit();
-			bot.dispose();
-		}
 	}
 
 	/**
 	 * <p>Unblocks a call to {@link #run() run}, causing the bot to exit</p>
 	 */
-	public synchronized void shutdown()
+	public void shutdown()
 	{
 		synchronized(srvs)
 		{
 			setDispose(true);
 			for (Service s : srvs) s.shutdown();
 		}
-		notifyAll(); // run() waits to stop thread being killed; exits when notified
+		synchronized(botLock)
+		{
+			if (bot != null)
+			{
+				bot.quit();
+				bot.dispose();
+			}
+		}
+		synchronized(this)
+		{
+			notifyAll(); // run() waits to stop thread being killed; exits when notified
+		}
 	}
 
 	@Override
@@ -364,9 +371,9 @@ public class InternetRelayCat implements Runnable, RelayCat
 					throw new RuntimeException(ex);
 				}
 
-				if (isDispose()) return;
 				synchronized (botLock)
 				{
+					if (isDispose()) return;
 					if (bot != null) return;
 					bot = connect();
 					// See if we actually achieved a connection
