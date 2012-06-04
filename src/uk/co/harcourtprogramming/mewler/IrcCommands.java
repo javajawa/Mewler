@@ -13,6 +13,7 @@ public enum IrcCommands
 	PONG("PONG :%s\r\n"),
 	JOIN("JOIN %s\r\n"),
 	JOIN_PASS("JOIN %s %s\r\n"),
+	TOPIC("TOPIC %s :%s\r\n"),
 	PART("PART %s\r\n"),
 	MESS("PRIVMSG %s :%s\r\n"),
 	ACTION("PRIVMSG %s :\u0001ACTION %s\u0001\r\n"),
