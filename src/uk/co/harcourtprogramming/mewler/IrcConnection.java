@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import uk.co.harcourtprogramming.logging.LogDecorator;
+import uk.co.harcourtprogramming.mewler.contexts.IrcContextApiToken;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPingMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcPongMessage;
 import uk.co.harcourtprogramming.mewler.servermesasges.IrcResponseCode;
@@ -179,6 +180,12 @@ public class IrcConnection
 	{
 		String command = IrcCommands.createCommandString(IrcCommands.QUIT, "Mewler");
 		outputThread.queue(command);
+	}
+
+	public void sendString(IrcContextApiToken token, String mess)
+	{
+		if (token == null) throw new IllegalAccessError("Called from outside API");
+		outputThread.queue(mess);
 	}
 
 	@Override
