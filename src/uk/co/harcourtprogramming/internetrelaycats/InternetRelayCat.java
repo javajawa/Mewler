@@ -166,6 +166,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 				);
 			}
 			srvs.add(s);
+			s.startup(this);
 		}
 	}
 

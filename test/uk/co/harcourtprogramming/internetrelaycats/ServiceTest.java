@@ -73,6 +73,13 @@ public class ServiceTest
 	 */
 	private class ServiceImpl extends Service
 	{
+
+		@Override
+		protected void startup(RelayCat r)
+		{
+			// Nothing to see here. Move along, citizen!
+		}
+
 		@Override
 		public void shutdown()
 		{

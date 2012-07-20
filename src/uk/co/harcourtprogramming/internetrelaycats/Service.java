@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.logging.LogFormatter;
 
+// TODO: Switch to LogDecorator
+
 /**
  * <p>The base class for Services for {@link RelayCat}</p>
  * <p>Services form the main part of the user logic for a chat bot; they
@@ -172,4 +174,13 @@ public abstract class Service
 	 * IRelayCat.unregister}</p>
 	 */
 	protected abstract void shutdown();
+
+	/**
+	 * <p>Code that is to be run when the service is added to a {@link RelayCat}
+	 * instance.</p>
+	 * <p>This function should not be called by user code; to have external code
+	 * remove a service, use {@link IRelayCat#unregister(Service)
+	 * IRelayCat.unregister}</p>
+	 */
+	protected abstract void startup(RelayCat r);
 }

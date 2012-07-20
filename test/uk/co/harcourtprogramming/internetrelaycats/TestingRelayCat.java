@@ -35,6 +35,12 @@ public final class TestingRelayCat extends InternetRelayCat
 		}
 
 		@Override
+		protected void startup(RelayCat r)
+		{
+			// Nothing to see here. Move along, citizen!
+		}
+
+		@Override
 		public void shutdown()
 		{
 			// Nothing to see here. Move along, citizen.

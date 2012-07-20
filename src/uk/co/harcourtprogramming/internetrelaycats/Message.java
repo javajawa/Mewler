@@ -1,5 +1,7 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
+import java.util.List;
+
 public class Message implements RelayCat
 {
 	/**
@@ -208,5 +210,11 @@ public class Message implements RelayCat
 	public boolean isDisposed()
 	{
 		return dispose;
+	}
+
+	@Override
+	public <Clazz extends Service> List<Clazz> getServicesByClass(Class<Clazz> clazz)
+	{
+		return inst.getServicesByClass(clazz);
 	}
 }
