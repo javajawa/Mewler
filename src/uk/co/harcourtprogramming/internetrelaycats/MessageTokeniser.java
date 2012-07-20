@@ -85,18 +85,27 @@ public class MessageTokeniser implements CharSequence
 		return token;
 	}
 
-	public synchronized void consume(String token)
+	/**
+	 * <p>Attempt to consume a particular token</p>
+	 * <p>If the remaining string starts with the supplied token, the position
+	 * offset is moved over it. If {@link #consumeWhitespace} is set, any
+	 * following whitespace is also consumed. If the token is not found at the
+	 * start of the string, state is not changed and the function returns false.
+	 * A null <code>token</code> value is treated as an empty string; both will
+	 * return true without changing state.</p>
+	 * @param token The token to consume
+	 * @return Whether the token was found and consumed
+	 */
+	public synchronized boolean consume(String token)
 	{
-		if (token == null) return;
+		if (token == null) return true;
 		if (original.startsWith(token, offset))
 		{
 			offset += token.length();
 			if (consumeWhitespace) consumeWhitespace();
+			return true;
 		}
-		else
-		{
-			// TODO: What should be do here?
-		}
+		return false;
 	}
 
 	public synchronized boolean getConsumeWhitespace()
