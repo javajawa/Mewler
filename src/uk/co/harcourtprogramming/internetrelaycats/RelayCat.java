@@ -1,5 +1,5 @@
 package uk.co.harcourtprogramming.internetrelaycats;
-
+import java.util.List;
 /**
  * @todo Class Documentation
  * @todo notes on how functions behave befoer connection is established
@@ -90,4 +90,11 @@ public interface RelayCat
 	 */
 	public String[] channels();
 	public boolean isConnected();
+	/**
+	 * Gets a list of the {@link Service Services} attached to this RelayCat
+	 * that match a given class.
+	 * @param clazz The base class to search for
+	 * @return A list of services that match that class
+	 */
+	public <Clazz extends Service> List<Clazz> getServicesByClass(Class<Clazz> clazz);
 }

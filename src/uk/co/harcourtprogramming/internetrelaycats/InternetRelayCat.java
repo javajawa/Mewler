@@ -1,10 +1,12 @@
 package uk.co.harcourtprogramming.internetrelaycats;
 
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.io.IOException;
 import java.net.NoRouteToHostException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import javax.net.ssl.SSLException;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 
@@ -340,6 +342,18 @@ public class InternetRelayCat implements Runnable, RelayCat
 	protected Iterable<FilterService> getFsrvs()
 	{
 		return fsrvs;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <Clazz extends Service> List<Clazz> getServicesByClass(Class<Clazz> clazz)
+	{
+		List<Clazz> found = new ArrayList<Clazz>();
+
+		for (Service s : srvs)
+			if (clazz.isAssignableFrom(s.getClass()))
+				found.add((Clazz)s);
+
+		return Collections.unmodifiableList(found);
 	}
 
 	void onDisconnect()
