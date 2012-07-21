@@ -4,12 +4,14 @@ public class OutboundMessage
 {
 	private final String target;
 	private final String message;
+	private final String nick;
 	private final boolean isAction;
 
-	OutboundMessage(String target, String message, boolean isAction)
+	OutboundMessage(String target, String message, String nick, boolean isAction)
 	{
 		this.target = target;
 		this.message = message;
+		this.nick = nick;
 		this.isAction = isAction;
 	}
 
@@ -23,6 +25,11 @@ public class OutboundMessage
 		return target;
 	}
 
+	public String getNick()
+	{
+		return nick;
+	}
+
 	public boolean isAction()
 	{
 		return isAction;
@@ -30,11 +37,11 @@ public class OutboundMessage
 
 	public OutboundMessage dervive(String message)
 	{
-		return new OutboundMessage(target, message, isAction);
+		return new OutboundMessage(target, message, nick, isAction);
 	}
 
 	public OutboundMessage dervive(String message, String traget)
 	{
-		return new OutboundMessage(target, message, isAction);
+		return new OutboundMessage(target, message, nick, isAction);
 	}
 }

@@ -6,7 +6,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import javax.net.ssl.SSLException;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 
@@ -236,7 +235,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (message == null || message.length() == 0) return;
 
-		OutboundMessage o = new OutboundMessage(target, message, false);
+		OutboundMessage o = new OutboundMessage(target, message, getNick(), false);
 
 		for (FilterService f : fsrvs)
 		{
@@ -254,7 +253,7 @@ public class InternetRelayCat implements Runnable, RelayCat
 	{
 		if (target == null || target.length() == 0) throw new IllegalArgumentException("Invalid target: null or empty string");
 		if (action == null || action.length() == 0) return;
-		OutboundMessage o = new OutboundMessage(target, action, true);
+		OutboundMessage o = new OutboundMessage(target, action, getNick(), true);
 
 		for (FilterService f : fsrvs)
 		{
