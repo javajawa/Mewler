@@ -51,6 +51,7 @@ public class IrcConnection
 		// Check if we've already attempted to connect through the currect socket
 		// .isAlive is false before start and after death. isDead becomes true before
 		// or as .isAlive becomes false at the end of thread life.
+		// Thus, if either are true, this Thread has been used at some point
 		if (inputThread.isAlive() || inputThread.isDead())
 			throw new ConnectException("This IrcConnetion instance has already been connected");
 
