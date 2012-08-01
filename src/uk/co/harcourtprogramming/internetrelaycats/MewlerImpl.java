@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.SSLSocketFactory;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 import uk.co.harcourtprogramming.mewler.IrcConnection;
