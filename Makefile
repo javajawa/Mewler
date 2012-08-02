@@ -12,7 +12,7 @@ BUILD=build
 TBUILD=tb
 PACKAGE=dist
 
-PACKAGEJAR=$(PACKAGE)/irc.jar
+PACKAGEJAR=$(PACKAGE)/mewler.jar
 LIBS=$(wildcard lib/*.jar)
 
 CP=$(SRC):$(LIBS: =:)
