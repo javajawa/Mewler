@@ -1,6 +1,6 @@
 package uk.co.harcourtprogramming.mewler.servermesasges;
 
-import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
+import uk.co.harcourtprogramming.mewler.MessageTokeniser;
 import uk.co.harcourtprogramming.mewler.IrcCommands;
 /**
  *

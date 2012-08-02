@@ -1,13 +1,7 @@
-InternetRelayCats
-=================
-
-InternetRelayCats is wrapper / API which I accidentally wrote whilst
-developing DoCitten.
-
 Mewler
 ======
 
-Mewler is the IRC interface that I wrote in a day for the lulz
+Mewler is an IRC binding for Java
 
 License
 -------

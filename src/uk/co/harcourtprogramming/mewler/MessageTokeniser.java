@@ -1,4 +1,4 @@
-package uk.co.harcourtprogramming.internetrelaycats;
+package uk.co.harcourtprogramming.mewler;
 
 /**
  * <p>Class for easily dealing with irc messages</p>

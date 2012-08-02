@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
-import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
+import uk.co.harcourtprogramming.mewler.MessageTokeniser;
 import uk.co.harcourtprogramming.logging.LogDecorator;
 /**
  *

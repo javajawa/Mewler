@@ -1,5 +1,5 @@
 package uk.co.harcourtprogramming.mewler.servermesasges;
-import uk.co.harcourtprogramming.internetrelaycats.MessageTokeniser;
+import uk.co.harcourtprogramming.mewler.MessageTokeniser;
 public class IrcPrivmsg extends AbstractIrcMessage
 {
 	public final String channel;
