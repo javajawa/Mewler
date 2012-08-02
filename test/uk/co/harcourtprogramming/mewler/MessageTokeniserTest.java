@@ -1,4 +1,4 @@
-package uk.co.harcourtprogramming.internetrelaycats;
+package uk.co.harcourtprogramming.mewler;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
