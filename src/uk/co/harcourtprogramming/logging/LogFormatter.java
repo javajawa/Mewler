@@ -24,60 +24,85 @@ public class LogFormatter extends Formatter
 	@Override
 	public String format(LogRecord l)
 	{
-		String mess = formatMessage(l);
+		StringBuilder buffer = new StringBuilder(128);
+
+		buffer
+			.append('[');
+
 		synchronized (time)
 		{
 			time.setTimeInMillis(l.getMillis());
-			return String.format("[%3$tD %3$tR %1$s %2$s] %4$s\n",
-				l.getLoggerName(),
-				l.getLevel().getLocalizedName(),
-				time,
-				mess
-			);
+			buffer.append(String.format("%1$tD %1$tR", time));
 		}
+
+		buffer
+			.append(' ')
+			.append(l.getLoggerName())
+			.append(' ')
+			.append(l.getLevel().getLocalizedName())
+			.append(']')
+			.append(' ')
+		;
+
+		formatMessage(l, buffer);
+
+		return buffer.toString();
 	}
 
 	@Override
-	public String formatMessage(LogRecord record)
+	public String formatMessage(final LogRecord record)
 	{
-		if (record.getMessage() == null)
-			return formatNoMessage(record);
+		StringBuilder buffer = new StringBuilder(128);
 
-		if (record.getThrown() == null)
-			return super.formatMessage(record);
-
-		Throwable thrown = record.getThrown();
-		return String.format("%s <%s>%s::%s\n\t%s\n\t%s",
-			thrown.getClass().getName(),
-			Thread.currentThread().getName(),
-			record.getSourceClassName(),
-			record.getSourceMethodName(),
-			super.formatMessage(record),
-			thrown.getLocalizedMessage()
-		);
+		formatMessage(record, buffer);
+		return buffer.toString();
 	}
 
-	private String formatNoMessage(LogRecord record)
+	public void formatMessage(final LogRecord record, StringBuilder buffer)
 	{
-		Throwable thrown = record.getThrown();
-
-		if (thrown == null)
+		if (record.getMessage() != null)
 		{
-			return String.format("null log from <%3s>%1s::%2s",
-				record.getSourceClassName(),
-				record.getSourceMethodName(),
-				Thread.currentThread().getName()
-			);
+			buffer.append(super.formatMessage(record));
+			if (record.getThrown() == null)
+			{
+				buffer.append('\n');
+				return;
+			}
 		}
 		else
+			buffer.append("Empty log message from");
+
+		buffer
+			.append(' ')
+			.append(record.getSourceClassName())
+			.append("::")
+			.append(record.getSourceMethodName())
+			.append(" <")
+			.append(Thread.currentThread().getName())
+			.append(':')
+			.append(Thread.currentThread().getThreadGroup().getName())
+			.append('>')
+			.append('\n');
+
+		if (record.getThrown() != null)
+			formatThrowable(record.getThrown(), buffer);
+	}
+
+	private void formatThrowable(final Throwable thrown, StringBuilder buffer)
+	{
+		buffer.append(thrown.getClass().getSimpleName()).append('\n');
+		if (thrown.getMessage() != null)
+			buffer.append(": ").append(thrown.getLocalizedMessage());
+		buffer.append('\n');
+
+		StackTraceElement[] trace = thrown.getStackTrace();
+
+		for (StackTraceElement frame : trace)
 		{
-			return String.format("%s <%s>%s::%s\n\t%s",
-				thrown.getClass().getName(),
-				Thread.currentThread().getName(),
-				record.getSourceClassName(),
-				record.getSourceMethodName(),
-				thrown.getLocalizedMessage()
-			);
+			buffer.append('\t').append(frame).append('\n');
 		}
+
+		if (thrown.getCause() != null)
+			formatThrowable(thrown.getCause(), buffer);
 	}
 }

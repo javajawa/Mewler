@@ -72,21 +72,40 @@ public class LogDecorator
 		log(Level.FINE, ex, messageFormat, params);
 	}
 
-	public void log(Level lvl, Throwable ex, String messForm, Object...params)
+	void log(Level lvl, Throwable ex, String messForm, Object...params)
 	{
+		if (!inner.isLoggable(lvl))
+			return;
+
+		StackTraceElement e = new Exception().getStackTrace()[2];
+
 		LogRecord r = new LogRecord(lvl, messForm);
 		r.setParameters(params);
 		r.setThrown(ex);
 		r.setLoggerName(inner.getName());
+		r.setSourceClassName(e.getClassName());
+		r.setSourceMethodName(e.getMethodName());
 		inner.log(r);
 	}
 
 	public void uncaught(Thread t, Throwable ex)
 	{
-		LogRecord r = new LogRecord(t, Level.SEVERE, "Uncaught excpetion in ''{0}''");
+		if (!inner.isLoggable(Level.SEVERE))
+			return;
+
+		StackTraceElement e = ex.getStackTrace()[0];
+
+		LogRecord r = new LogRecord(t, Level.SEVERE, "Uncaught exception in ''{0}''");
 		r.setParameters(new Object[] {t.getName()});
 		r.setThrown(ex);
 		r.setLoggerName(inner.getName());
+		r.setSourceClassName(e.getClassName());
+		r.setSourceMethodName(e.getMethodName());
 		inner.log(r);
+	}
+
+	public void setLevel(Level lvl)
+	{
+		inner.setLevel(lvl);
 	}
 }
