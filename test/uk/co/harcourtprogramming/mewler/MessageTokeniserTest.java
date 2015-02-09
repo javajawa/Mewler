@@ -231,6 +231,24 @@ public class MessageTokeniserTest
 		assertEquals(expResult1, instance.nextToken(delim));
 		assertEquals(expResult2, instance.nextToken(delim));
 	}
+	
+	/**
+	 * Test of nextToken method, of class MessageTokeniser.
+	 */
+	@Test
+	public void testNextTokenAutoDelimWsConsume()
+	{
+		final String testStr = "bob\t ben";
+		final char delim = ' ';
+		final String expResult1 = "bob";
+		final String expResult2 = "ben";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+		instance.setConsumeWhitespace(true);
+
+		assertEquals(expResult1, instance.nextToken());
+		assertEquals(expResult2, instance.nextToken());
+	}
 
 	/**
 	 * Test of consume method, of class MessageTokeniser.
@@ -349,6 +367,20 @@ public class MessageTokeniserTest
 
 		assertEquals(token1, instance.nextToken(' '));
 		assertEquals(token2, instance.nextToken(' '));
+	}
+	
+	@Test
+	public void testWhiteSpaceAutoDelimConsume()
+	{
+		final String testStr = "Hello   \t World";
+		final String token1 = "Hello";
+		final String token2 = "World";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+		instance.setConsumeWhitespace(true);
+
+		assertEquals(token1, instance.nextToken());
+		assertEquals(token2, instance.nextToken());
 	}
 
 	@Test(expected=IllegalArgumentException.class)
