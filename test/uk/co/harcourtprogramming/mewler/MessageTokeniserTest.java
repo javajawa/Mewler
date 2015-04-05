@@ -231,7 +231,7 @@ public class MessageTokeniserTest
 		assertEquals(expResult1, instance.nextToken(delim));
 		assertEquals(expResult2, instance.nextToken(delim));
 	}
-	
+
 	/**
 	 * Test of nextToken method, of class MessageTokeniser.
 	 */
@@ -368,7 +368,7 @@ public class MessageTokeniserTest
 		assertEquals(token1, instance.nextToken(' '));
 		assertEquals(token2, instance.nextToken(' '));
 	}
-	
+
 	@Test
 	public void testWhiteSpaceAutoDelimConsume()
 	{

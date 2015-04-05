@@ -42,7 +42,7 @@ public class MessageTokeniser implements CharSequence
 		while (!isEmpty() &&(Character.isWhitespace(original.charAt(offset))))
 			++offset;
 	}
-	
+
 	public synchronized int indexOfWhitespace()
 	{
 		int myOffset = offset;
@@ -53,7 +53,7 @@ public class MessageTokeniser implements CharSequence
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Returns next whitespace-delimited token and consumes remaining whitespace
 	 * @return next token
