@@ -14,5 +14,9 @@ public enum PrivmsgExtensionCommands
 	/**
 	 * Message was an IRC action
 	 */
-	ACTION;
+	ACTION,
+	/**
+	 * Message was a Clacks request
+	 */
+	CLACKS;
 }
