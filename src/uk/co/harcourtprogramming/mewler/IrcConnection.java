@@ -169,6 +169,12 @@ public class IrcConnection
 		outputThread.queue(command);
 	}
 
+	public void setTopic(String channel, String topic)
+	{
+		String command = IrcCommands.createCommandString(IrcCommands.TOPIC, channel, topic);
+		outputThread.queue(command);
+	}
+
 	public void part(String channel)
 	{
 		String command = IrcCommands.createCommandString(IrcCommands.PART, channel);

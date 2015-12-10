@@ -99,6 +99,7 @@ public class MessageTokeniser implements CharSequence
 
 		return token;
 	}
+
 	public synchronized String nextTokenWithDelim(String delim)
 	{
 		if (isEmpty() || delim == null) return null;
