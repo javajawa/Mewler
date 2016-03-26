@@ -4,16 +4,21 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
+/**
+ * Basic test of the connection transaction for Mewler
+ *
+ * @author Benedict
+ */
 public class MewlerTest
 {
-	public MewlerTest()
-	{
-	}
 
 	/**
 	 * Test of connect method, of class IrcConnection.
+	 *
+	 * @throws java.lang.Exception If an error occurs
 	 */
 	@Test(timeout=8000)
 	public void testConnect() throws Exception
@@ -31,8 +36,10 @@ public class MewlerTest
 		final IrcConnection instance = new IrcConnection(inputSocket.in, outputSocket.out, null);
 		final Thread main = Thread.currentThread();
 
-		final Thread testHolder = new Thread() {
+		final Thread testHolder = new Thread()
+		{
 			private Exception e;
+
 			@Override
 			public void run()
 			{
@@ -56,7 +63,10 @@ public class MewlerTest
 			@Override
 			public ClassLoader getContextClassLoader()
 			{
-				if (e != null) throw new Error(e);
+				if (e != null)
+				{
+					throw new Error(e);
+				}
 				return super.getContextClassLoader();
 			}
 		};
