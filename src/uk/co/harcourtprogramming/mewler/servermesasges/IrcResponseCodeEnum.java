@@ -243,11 +243,11 @@ public enum IrcResponseCodeEnum
 	"When replying to an ADMIN message, a server is expected to use replies RLP_ADMINME through to RPL_ADMINEMAIL and provide a text message with each.  For RPL_ADMINLOC1 a description of what city, state and country the server is in is expected, followed by details of the university and department (RPL_ADMINLOC2) and finally the administrative contact for the server (an email address here is required) in RPL_ADMINEMAIL."),
 	UNKNOWN(-1, "", "An Unknown reply number");
 
+	private final static Map<Integer, IrcResponseCodeEnum> mapping = new TreeMap<>();
+
 	public final int number;
 	public final String format;
 	public final String info;
-	private final static Map<Integer, IrcResponseCodeEnum> mapping =
-		new TreeMap<Integer, IrcResponseCodeEnum>();
 
 	static
 	{
@@ -256,7 +256,6 @@ public enum IrcResponseCodeEnum
 			mapping.put(item.number, item);
 		}
 	}
-
 
 	private IrcResponseCodeEnum(int number, String format, String info)
 	{
@@ -268,7 +267,9 @@ public enum IrcResponseCodeEnum
 	public static IrcResponseCodeEnum getByCode(int code)
 	{
 		if (!mapping.containsKey(code))
+		{
 			return UNKNOWN;
+		}
 
 		return mapping.get(code);
 	}
