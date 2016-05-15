@@ -3,6 +3,7 @@ package uk.co.harcourtprogramming.mewler.servermesasges;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assume.assumeTrue;
 
 public class IrcResponseCodeEnumTest
@@ -31,10 +32,12 @@ public class IrcResponseCodeEnumTest
 	@Test
 	public void testGetByInvalidCode()
 	{
-		int code = -1;
+		int code = -2;
+
 		IrcResponseCodeEnum expResult = IrcResponseCodeEnum.UNKNOWN;
 		IrcResponseCodeEnum result = IrcResponseCodeEnum.getByCode( code );
 
+		assertNotEquals( expResult.number, code );
 		assertEquals( expResult, result );
 	}
 	
