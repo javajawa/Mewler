@@ -36,7 +36,7 @@ public class MessageTokeniserTest
 	{
 		final String data = "bob";
 		MessageTokeniser instance = new MessageTokeniser(data);
-		instance.consume(null);
+		assertTrue(instance.consume(null));
 		assertEquals(data, instance.toString());
 	}
 
@@ -45,7 +45,7 @@ public class MessageTokeniserTest
 	{
 		final String data = "bob";
 		MessageTokeniser instance = new MessageTokeniser(data);
-		instance.consume("");
+		assertTrue(instance.consume(""));
 		assertEquals(data, instance.toString());
 	}
 
@@ -203,7 +203,7 @@ public class MessageTokeniserTest
 
 		MessageTokeniser instance = new MessageTokeniser(testStr);
 
-		instance.consume(part1);
+		assertTrue(instance.consume(part1));
 		assertEquals(expResult2, instance.toString());
 	}
 
@@ -223,7 +223,7 @@ public class MessageTokeniserTest
 
 		assertFalse("Test precondition not met: consumeWhitspace not fasle by default", instance.getConsumeWhitespace());
 
-		instance.consume(part1);
+		assertTrue(instance.consume(part1));
 		assertEquals("Test precondition not met.", expResult1, instance.toString());
 
 		instance.setConsumeWhitespace(true);
@@ -276,7 +276,7 @@ public class MessageTokeniserTest
 		final String remainder = testStr.substring(4);
 
 		MessageTokeniser instance = new MessageTokeniser(testStr);
-		instance.consume(token);
+		assertTrue(instance.consume(token));
 
 		assertEquals(remainder, instance.toString());
 	}
@@ -290,9 +290,9 @@ public class MessageTokeniserTest
 		final String remainder = testStr.substring(4).substring(3);
 
 		MessageTokeniser instance = new MessageTokeniser(testStr);
-		instance.consume(token1);
+		assertTrue(instance.consume(token1));
 		assertEquals(token2 + remainder, instance.toString());
-		instance.consume(token2);
+		assertTrue(instance.consume(token2));
 		assertEquals(remainder, instance.toString());
 	}
 
@@ -308,8 +308,22 @@ public class MessageTokeniserTest
 
 		MessageTokeniser instance = new MessageTokeniser(testStr);
 		assertTrue(instance.startsWith(token1));
-		instance.consume(token1);
+		assertTrue(instance.consume(token1));
 		assertTrue(instance.startsWith(token2));
+	}
+
+	/**
+	 * Test of startsWith method, of class MessageTokeniser.
+	 */
+	@Test
+	public void testUnavailableConsume()
+	{
+		final String testStr = "Hello world";
+		final String token   = "bob";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+		assertFalse(instance.startsWith(token));
+		assertFalse(instance.consume(token));
 	}
 
 	@Test
@@ -341,7 +355,7 @@ public class MessageTokeniserTest
 		final String remainder = testStr.substring(4);
 
 		MessageTokeniser instance = new MessageTokeniser(testStr);
-		instance.consume(token);
+		assertTrue(instance.consume(token));
 
 		assertEquals(remainder, instance.toString());
 	}
