@@ -1,7 +1,8 @@
 package uk.co.harcourtprogramming.mewler;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class MessageTokeniserTest
 {
@@ -130,6 +131,20 @@ public class MessageTokeniserTest
 		final String data = "bob ben";
 		MessageTokeniser instance = new MessageTokeniser(data);
 		assertEquals("", instance.nextTokenWithDelim(""));
+	}
+
+	@Test
+	public void testTokenWithDelimFinalToken()
+	{
+		final String testStr = "Hello World";
+		final String token1 = "Hello ";
+		final String token2 = "World";
+
+		MessageTokeniser instance = new MessageTokeniser(testStr);
+
+		assertEquals(token1, instance.nextTokenWithDelim(" "));
+		assertEquals(token2, instance.nextTokenWithDelim(" "));
+		assertNull(instance.nextToken());
 	}
 
 	@Test
@@ -331,7 +346,8 @@ public class MessageTokeniserTest
 		assertEquals(remainder, instance.toString());
 	}
 
-	@Test public void testTokenise()
+	@Test
+	public void testTokenise()
 	{
 		final String testStr = "Hello World";
 		final String token1 = "Hello";
@@ -343,7 +359,6 @@ public class MessageTokeniserTest
 		assertEquals(token2, instance.nextToken(' '));
 		assertNull(instance.nextToken(' '));
 	}
-
 
 	@Test
 	public void testTokeniseOnEmptyString()
